@@ -12,7 +12,7 @@ export default function Home() {
   }, [router]);
 
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden">
+    <div className="flex min-h-screen items-center justify-center bg-gray-950 text-white">
       {/* Hero Section */}
       <section className="relative w-full py-20 md:py-28 lg:py-32 overflow-hidden">
         {/* Background gradient */}
