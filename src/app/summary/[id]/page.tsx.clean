@@ -1,0 +1,283 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { ArrowLeft, Clock, Copy, Download, Share2, Loader2 } from "lucide-react";
+
+// Initial empty type definition for summary state
+interface SummaryData {
+  id: string;
+  title: string;
+  sourceType: string;
+  sourceUrl: string;
+  duration: string;
+  dateProcessed: string;
+  summary: string;
+  keyQuotes: Array<{ text: string; timestamp?: string }>;
+  socialPost: string;
+  blogPost: string;
+}
+
+export default function SummaryPage() {
+  // Use next/navigation's useParams hook instead of React.use()
+  const params = useParams();
+  const id = params.id as string;
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState("summary");
+  const [summary, setSummary] = useState<SummaryData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  
+  // Fetch the summary data based on ID
+  useEffect(() => {
+    async function fetchSummary() {
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/history/${id}`);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch summary: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        if (data.success && data.item) {
+          setSummary({
+            id: data.item.id,
+            title: data.item.contentMetadata?.title || "Untitled Content",
+            sourceType: data.item.contentType || "unknown",
+            sourceUrl: data.item.originalContent || "",
+            duration: data.item.contentMetadata?.duration || "Unknown",
+            dateProcessed: data.item.processedAt || new Date().toISOString(),
+            summary: data.item.summary || "No summary available",
+            keyQuotes: data.item.keyQuotes || [],
+            socialPost: data.item.socialPost || "No social post available",
+            blogPost: data.item.blogPost || "No blog post available"
+          });
+        } else {
+          throw new Error("Invalid data format received");
+        }
+      } catch (err) {
+        console.error("Error fetching summary:", err);
+        setError(err instanceof Error ? err.message : "Failed to load summary data");
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchSummary();
+  }, [id]);
+  
+  const handleCopy = (text: string, type: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success(`${type} copied to clipboard`);
+  };
+  
+  const handleDownload = (content: string, fileName: string) => {
+    const element = document.createElement("a");
+    const file = new Blob([content], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = fileName;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    toast.success(`${fileName} downloaded`);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+  };
+
+  // Main render with conditional states
+  return (
+    <div className="container max-w-5xl mx-auto py-8 px-4">
+      {loading ? (
+        <div className="flex flex-col items-center justify-center min-h-[60vh]">
+          <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+          <p className="text-xl">Loading summary data...</p>
+        </div>
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center min-h-[60vh]">
+          <div className="text-destructive mb-4 text-6xl">⚠️</div>
+          <h2 className="text-2xl font-bold mb-4">Error Loading Summary</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <Button onClick={() => router.push('/dashboard')}>
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
+          </Button>
+        </div>
+      ) : summary ? (
+        <div className="container py-10">
+          <div className="mb-6">
+            <Button 
+              variant="ghost" 
+              className="pl-0 mb-4"
+              onClick={() => router.push("/dashboard")}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
+            </Button>
+            <h1 className="text-3xl font-bold">{summary.title}</h1>
+            <div className="flex items-center mt-2 text-gray-500 text-sm">
+              <Badge variant="outline" className="mr-4">{summary.sourceType}</Badge>
+              {summary.duration && (
+                <div className="flex items-center mr-4">
+                  <Clock className="mr-1 h-3.5 w-3.5" /> 
+                  {summary.duration}
+                </div>
+              )}
+              <div>Processed on {formatDate(summary.dateProcessed)}</div>
+            </div>
+          </div>
+
+          <Tabs defaultValue="summary" className="w-full" onValueChange={setActiveTab}>
+            <TabsList className="grid grid-cols-4 mb-8">
+              <TabsTrigger value="summary">Summary</TabsTrigger>
+              <TabsTrigger value="key-quotes">Key Quotes</TabsTrigger>
+              <TabsTrigger value="social-post">Social Media</TabsTrigger>
+              <TabsTrigger value="blog-post">Blog Post</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="summary" className="mt-0">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle>AI Summary</CardTitle>
+                  <div className="flex space-x-2">
+                    <Button size="sm" variant="outline" onClick={() => handleCopy(summary.summary, "Summary")}>
+                      <Copy className="mr-2 h-4 w-4" /> Copy
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={() => handleDownload(summary.summary, "summary.txt")}>
+                      <Download className="mr-2 h-4 w-4" /> Download
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <p className="whitespace-pre-wrap">{summary.summary}</p>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="key-quotes" className="mt-0">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle>Key Quotes with Timestamps</CardTitle>
+                  <div className="flex space-x-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={() => handleCopy(
+                        summary.keyQuotes.map(q => `"${q.text}" [${q.timestamp || 'unknown'}]`).join('\n\n'), 
+                        "Key quotes"
+                      )}
+                    >
+                      <Copy className="mr-2 h-4 w-4" /> Copy All
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={() => handleDownload(
+                        summary.keyQuotes.map(q => `"${q.text}" [${q.timestamp || 'unknown'}]`).join('\n\n'), 
+                        "key-quotes.txt"
+                      )}
+                    >
+                      <Download className="mr-2 h-4 w-4" /> Download
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-4 space-y-6">
+                  {summary.keyQuotes.map((quote, index) => (
+                    <div key={index} className="p-4 border rounded-lg bg-gray-50">
+                      <div className="flex justify-between items-start">
+                        <p className="text-gray-700 italic">"{quote.text}"</p>
+                        {quote.timestamp && (
+                          <Badge className="ml-4 shrink-0 cursor-pointer hover:bg-primary" onClick={() => handleCopy(quote.timestamp || '', "Timestamp")}>
+                            {quote.timestamp}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="social-post" className="mt-0">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle>Social Media Post</CardTitle>
+                  <div className="flex space-x-2">
+                    <Button size="sm" variant="outline" onClick={() => handleCopy(summary.socialPost, "Social Post")}>
+                      <Copy className="mr-2 h-4 w-4" /> Copy
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={() => handleDownload(summary.socialPost, "social-post.txt")}
+                    >
+                      <Download className="mr-2 h-4 w-4" /> Download
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="p-6 border rounded-xl bg-white">
+                    <p className="text-gray-700 leading-7 whitespace-pre-wrap">{summary.socialPost}</p>
+                  </div>
+                  <div className="mt-6 flex justify-center space-x-4">
+                    <Button className="bg-blue-500 hover:bg-blue-600">
+                      <Share2 className="mr-2 h-4 w-4" /> Share to Twitter
+                    </Button>
+                    <Button className="bg-blue-700 hover:bg-blue-800">
+                      <Share2 className="mr-2 h-4 w-4" /> Share to LinkedIn
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="blog-post" className="mt-0">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle>Blog Post</CardTitle>
+                  <div className="flex space-x-2">
+                    <Button size="sm" variant="outline" onClick={() => handleCopy(summary.blogPost, "Blog Post")}>
+                      <Copy className="mr-2 h-4 w-4" /> Copy
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={() => handleDownload(summary.blogPost, "blog-post.md")}
+                    >
+                      <Download className="mr-2 h-4 w-4" /> Download
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="p-6 border rounded-xl bg-white">
+                    <article className="prose max-w-none">
+                      <div className="whitespace-pre-wrap">{summary.blogPost}</div>
+                    </article>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      ) : (
+        <div className="container py-10">
+          <Card className="p-6 bg-red-50 border-red-200">
+            <CardTitle className="text-red-600 mb-2">Error Loading Summary</CardTitle>
+            <p>{error || 'Unknown error occurred while loading the summary'}</p>
+          </Card>
+        </div>
+      )}
+    </div>
+  );
+}

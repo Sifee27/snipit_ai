@@ -1,0 +1,12 @@
+[
+  {
+    "id": "user_123",
+    "email": "test@example.com",
+    "name": "Test User",
+    "plan": "pro",
+    "createdAt": "2025-05-18T00:44:47.998Z",
+    "usageCount": 36,
+    "maxUsage": 999,
+    "password": "$2b$10$S2zw2usUTQgpsKGg6ieL0u3qtplZdvuQYakVNm/Eqs0ggKcaOz.CW"
+  }
+]

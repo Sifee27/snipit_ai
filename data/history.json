@@ -1,0 +1,784 @@
+[
+  {
+    "userId": "user_123",
+    "originalContent": "youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "This video covers focused topic material with clear explanations and visual examples. The presenter delivers well-structured content with key points highlighted.",
+    "keyQuotes": [
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "05:37"
+      }
+    ],
+    "socialPost": "Just watched an amazing video about AI development! The insights on combining technical skills with creative thinking are spot-on. #AI #Development #FutureTech",
+    "blogPost": "# The Future of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical applications across industries. This video provides excellent insights into how businesses are leveraging AI technology.\n\n## Key Takeaways\n\nThe most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T14:13:49.673Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "N/A"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "65f9eb14-7ced-46bf-bc4a-a662640b5a1f",
+    "createdAt": "2025-05-19T14:13:49.676Z"
+  },
+  {
+    "userId": "anon-1sren7jq205",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "This video (ID: 7ARBJQn6QkM) covers focused topic material with clear explanations and visual examples. The presenter delivers well-structured content with key points highlighted throughout. The video includes both theoretical concepts and practical applications related to the subject matter.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:18"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:35"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:14"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:54"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:02"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T15:50:09.946Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "N/A"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "ea527848-9bec-4334-b928-c9ace8d3120a",
+    "createdAt": "2025-05-19T15:50:09.948Z"
+  },
+  {
+    "userId": "anon-j8p95p7gi8r",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "This video (ID: 7ARBJQn6QkM) covers focused topic material with clear explanations and visual examples. The presenter delivers well-structured content with key points highlighted throughout. The video includes both theoretical concepts and practical applications related to the subject matter.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:05"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:23"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:07"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:31"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:25"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T15:52:21.381Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "N/A"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "9de214f7-62eb-4ad8-af75-70ada986b781",
+    "createdAt": "2025-05-19T15:52:21.384Z"
+  },
+  {
+    "userId": "anon-ebqkh1tsdr",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "This video (ID: 7ARBJQn6QkM) covers focused topic material with clear explanations and visual examples. The presenter delivers well-structured content with key points highlighted throughout. The video includes both theoretical concepts and practical applications related to the subject matter.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:02"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:18"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:32"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:18"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:11"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T16:10:26.063Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "N/A"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "611e8d44-e2aa-4d9c-aa5e-18193930774c",
+    "createdAt": "2025-05-19T16:10:26.065Z"
+  },
+  {
+    "userId": "anon-thggqmrgik",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "This video (ID: 7ARBJQn6QkM) covers focused topic material with clear explanations and visual examples. The presenter delivers well-structured content with key points highlighted throughout. The video includes both theoretical concepts and practical applications related to the subject matter.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:58"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:46"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:29"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:17"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:27"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T16:10:49.822Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "N/A"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "529f82ca-93c3-495a-b83e-e233b7333f4b",
+    "createdAt": "2025-05-19T16:10:49.823Z"
+  },
+  {
+    "userId": "anon-18p6sn98epj",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "This video (ID: 7ARBJQn6QkM) covers focused topic material with clear explanations and visual examples. The presenter delivers well-structured content with key points highlighted throughout. The video includes both theoretical concepts and practical applications related to the subject matter.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:37"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:50"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:05"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:50"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:35"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T16:19:44.942Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "N/A"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "30cfadbd-f6e4-42c7-b5b3-50a9fb223362",
+    "createdAt": "2025-05-19T16:19:44.944Z"
+  },
+  {
+    "userId": "anon-qi1oufnoy3",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "This video (ID: 7ARBJQn6QkM) covers focused topic material with clear explanations and visual examples. The presenter delivers well-structured content with key points highlighted throughout. The video includes both theoretical concepts and practical applications related to the subject matter.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:45"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:53"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:24"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:41"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:29"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T16:28:00.590Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "N/A"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "0e124dec-1c2b-4f4b-b301-f052162e4722",
+    "createdAt": "2025-05-19T16:28:00.592Z"
+  },
+  {
+    "userId": "anon-6981l4pqrni",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "This video (ID: 7ARBJQn6QkM) covers focused topic material with clear explanations and visual examples. The presenter delivers well-structured content with key points highlighted throughout. The video includes both theoretical concepts and practical applications related to the subject matter.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:54"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:48"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:47"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:30"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:27"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T16:28:13.911Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "N/A"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "159bcc5a-ddb8-4210-9dde-bd2ffc11c06c",
+    "createdAt": "2025-05-19T16:28:13.912Z"
+  },
+  {
+    "userId": "anon-9qp0pbhls0c",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "This video (ID: 7ARBJQn6QkM) covers focused topic material with clear explanations and visual examples. The presenter delivers well-structured content with key points highlighted throughout. The video includes both theoretical concepts and practical applications related to the subject matter.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:45"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:20"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:36"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:08"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:02"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T16:41:40.509Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "N/A"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "9f556ad9-1e0e-4cd3-95c8-0cf5e1cc7c9b",
+    "createdAt": "2025-05-19T16:41:40.511Z"
+  },
+  {
+    "userId": "anon-nw3qsneqtwm",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "This video (ID: 7ARBJQn6QkM) covers focused topic material with clear explanations and visual examples. The presenter delivers well-structured content with key points highlighted throughout. The video includes both theoretical concepts and practical applications related to the subject matter.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:08"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:53"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:23"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:40"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:47"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T17:44:55.120Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "N/A"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "83909478-ca85-4f78-b8b3-e4e69693d9ac",
+    "createdAt": "2025-05-19T17:44:55.123Z"
+  },
+  {
+    "userId": "user_123",
+    "originalContent": "https://www.youtube.com/watch?v=cUlharo8sPQ",
+    "contentType": "youtube",
+    "sourceUrl": "https://www.youtube.com/watch?v=cUlharo8sPQ",
+    "summary": "No content was provided to summarize.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:30"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:11"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:38"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:10"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:52"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T17:55:49.933Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "08:45"
+    },
+    "isRealAiContent": true,
+    "isMockFallback": false,
+    "id": "f23be1b6-dbfa-41ab-b160-8c4f6e729ff6",
+    "createdAt": "2025-05-19T17:55:49.936Z"
+  },
+  {
+    "userId": "user_123",
+    "originalContent": "https://www.youtube.com/watch?v=cUlharo8sPQ",
+    "contentType": "youtube",
+    "sourceUrl": "https://www.youtube.com/watch?v=cUlharo8sPQ",
+    "summary": "No content was provided to summarize.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:24"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:16"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:23"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:55"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:47"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T18:03:34.545Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "08:45"
+    },
+    "isRealAiContent": true,
+    "isMockFallback": false,
+    "id": "77a29c91-9998-4052-8291-5077bca75bf8",
+    "createdAt": "2025-05-19T18:03:34.548Z"
+  },
+  {
+    "userId": "user_123",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "No content was provided to summarize.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:31"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:19"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:47"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:32"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:40"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T18:08:48.331Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "08:45"
+    },
+    "isRealAiContent": true,
+    "isMockFallback": false,
+    "id": "42ebee42-60bc-45a7-b434-533e22039270",
+    "createdAt": "2025-05-19T18:08:48.334Z"
+  },
+  {
+    "userId": "user_123",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "No content was provided to summarize.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:19"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:10"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:00"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:54"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:14"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T18:14:23.374Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "08:45"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "ce5ea21b-d0e0-4e41-a071-d72d72c1d280",
+    "createdAt": "2025-05-19T18:14:23.376Z"
+  },
+  {
+    "userId": "user_123",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "No content was provided to summarize.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:15"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:42"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:07"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:36"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:45"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T18:21:00.223Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "08:45"
+    },
+    "isRealAiContent": true,
+    "isMockFallback": false,
+    "id": "8d6b9f62-01b7-4522-8214-982281469bb5",
+    "createdAt": "2025-05-19T18:21:00.225Z"
+  },
+  {
+    "userId": "user_123",
+    "originalContent": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "contentType": "youtube",
+    "sourceUrl": "https://youtube.com/watch?v=7ARBJQn6QkM",
+    "summary": "No content was provided to summarize.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:03"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:11"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:34"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:26"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:15"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T18:25:56.648Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "08:45"
+    },
+    "isRealAiContent": true,
+    "isMockFallback": false,
+    "id": "2730f8f3-d272-4d58-83b8-9a607e4a39ca",
+    "createdAt": "2025-05-19T18:25:56.650Z"
+  },
+  {
+    "userId": "user_123",
+    "originalContent": "https://www.youtube.com/watch?v=HR-X9KunsYY",
+    "contentType": "youtube",
+    "sourceUrl": "https://www.youtube.com/watch?v=HR-X9KunsYY",
+    "summary": "No content was provided to summarize.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:09"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:03"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:58"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:09"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:25"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T18:31:37.095Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "08:45"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "2a3b745d-a3f3-46b6-ae90-9fe0a90dcfcb",
+    "createdAt": "2025-05-19T18:31:37.098Z"
+  },
+  {
+    "userId": "user_123",
+    "originalContent": "https://www.youtube.com/watch?v=HR-X9KunsYY",
+    "contentType": "youtube",
+    "sourceUrl": "https://www.youtube.com/watch?v=HR-X9KunsYY",
+    "summary": "No content was provided to summarize.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:19"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:14"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:08"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:16"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:06"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T18:40:18.113Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "08:45"
+    },
+    "isRealAiContent": false,
+    "isMockFallback": true,
+    "id": "13064e99-bd3d-4129-96bb-c887e4fa2eca",
+    "createdAt": "2025-05-19T18:40:18.116Z"
+  },
+  {
+    "userId": "user_123",
+    "originalContent": "https://www.youtube.com/watch?v=HR-X9KunsYY",
+    "contentType": "youtube",
+    "sourceUrl": "https://www.youtube.com/watch?v=HR-X9KunsYY",
+    "summary": "No content was provided to summarize.",
+    "keyQuotes": [
+      {
+        "text": "The most important thing to remember is that success in this field requires both technical skill and creative thinking.",
+        "timestamp": "01:44"
+      },
+      {
+        "text": "Data without context is meaningless; always start by understanding the problem you're trying to solve.",
+        "timestamp": "03:07"
+      },
+      {
+        "text": "The future belongs to those who can adapt to rapidly changing technologies while staying focused on human needs.",
+        "timestamp": "05:29"
+      },
+      {
+        "text": "Don't confuse motion with progress. Many teams are busy but few are actually moving toward meaningful objectives.",
+        "timestamp": "07:45"
+      },
+      {
+        "text": "The biggest mistake companies make is treating AI as a magic solution rather than a tool that requires careful implementation.",
+        "timestamp": "09:02"
+      }
+    ],
+    "socialPost": "Just finished exploring the latest developments in #AI and #MachineLearning! The potential impact on productivity and innovation is mind-blowing. The key takeaway: organizations that adopt these technologies thoughtfully (not hastily) will see the biggest benefits. Are you incorporating AI into your workflow yet?",
+    "blogPost": "# The Transformative Power of AI in Modern Business\n\n## Introduction\n\nIn recent years, artificial intelligence has moved from the realm of science fiction into practical business applications. This transition represents one of the most significant technological shifts of our time, comparable to the advent of the internet or mobile computing.\n\n## Key Applications\n\nOrganizations across industries are finding valuable applications for AI:\n\n1. **Customer Service Automation** - AI-powered chatbots and virtual assistants are handling routine inquiries, allowing human agents to focus on complex issues.\n\n2. **Predictive Analytics** - Machine learning models are helping businesses forecast trends, anticipate customer needs, and optimize operations.\n\n3. **Content Generation** - Natural language processing tools are assisting with everything from email responses to marketing copy creation.\n\n## Implementation Challenges\n\nDespite the promise, many organizations struggle with:\n\n- Data quality and accessibility issues\n- Integration with legacy systems\n- Talent shortages in AI specializations\n- Establishing meaningful metrics for success\n\n## Looking Ahead\n\nAs AI technologies continue to mature, we can expect to see more seamless integration into existing workflows and entirely new applications we haven't yet imagined. Organizations that build AI literacy across their workforce—not just in technical teams—will be best positioned to capitalize on these opportunities.\n\nThe most successful implementations will be those that augment human capabilities rather than simply attempting to replace them.",
+    "title": "The Future of AI Development",
+    "processedAt": "2025-05-19T18:46:17.987Z",
+    "contentMetadata": {
+      "title": "The Future of AI Development",
+      "sourceType": "youtube",
+      "duration": "08:45"
+    },
+    "isRealAiContent": true,
+    "isMockFallback": false,
+    "id": "e8cdbc41-1de4-4d9c-bb2a-8860342887bf",
+    "createdAt": "2025-05-19T18:46:17.991Z"
+  }
+]

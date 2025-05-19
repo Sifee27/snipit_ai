@@ -1,0 +1,53 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { mockProcessContent } from '@/lib/mock-processor';
+
+/**
+ * Handle POST requests to /api/process
+ * This is a simplified fallback-only version to ensure some functionality works
+ */
+export async function POST(req: NextRequest) {
+  try {
+    // Parse the request body
+    const body = await req.json();
+    
+    // Log request for debugging
+    console.log('Processing request:', {
+      url: body.url,
+      contentType: body.contentType,
+      contentLength: body.content?.length || 0
+    });
+    
+    // Generate mock content
+    const mockResult = mockProcessContent(body);
+    console.log('Generated mock content');
+    
+    // Return the mock result
+    return NextResponse.json({
+      success: true,
+      result: mockResult,
+      message: 'Using mock data due to server configuration',
+      provider: 'mock'
+    });
+  } catch (error) {
+    console.error('Error in fallback processor:', error);
+    
+    // Return a generic mock response if everything fails
+    const mockResult = mockProcessContent({
+      url: "https://example.com/fallback",
+      content: "This is a fallback content for testing.",
+      contentType: "text",
+      options: {
+        maxSummaryLength: 100,
+        includeKeyQuotes: true,
+        includeSocialPost: true
+      }
+    });
+    
+    return NextResponse.json({
+      success: true,
+      result: mockResult,
+      message: 'Using mock data after error',
+      provider: 'mock'
+    });
+  }
+}

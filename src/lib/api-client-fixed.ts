@@ -1,0 +1,187 @@
+/**
+ * API client for communicating with the backend
+ */
+
+// Base API configuration
+const API_BASE_URL = '/api';
+
+// Error class for API errors
+export class ApiError extends Error {
+  statusCode: number;
+  
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.name = 'ApiError';
+    this.statusCode = statusCode;
+  }
+}
+
+// Common fetch wrapper with error handling and retry logic
+async function fetchAPI<T = any>(
+  endpoint: string,
+  options: RequestInit = {},
+  retryCount = 3,
+  retryDelay = 1000
+): Promise<T> {
+  const url = `${API_BASE_URL}${endpoint}`;
+  
+  // Validate endpoint
+  if (!endpoint.startsWith('/')) {
+    throw new ApiError('Invalid endpoint format. Must start with /', 400);
+  }
+
+  // Set default headers
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+  };
+
+  // Validate request body if present
+  if (options.body) {
+    try {
+      JSON.parse(options.body as string);
+    } catch (e) {
+      throw new ApiError('Invalid JSON in request body', 400);
+    }
+  }
+
+  let lastError: Error | null = null;
+  
+  // Implement retry logic
+  for (let attempt = 0; attempt < retryCount; attempt++) {
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers,
+      });
+
+      // Handle rate limiting with exponential backoff
+      if (response.status === 429) {
+        const retryAfter = parseInt(response.headers.get('Retry-After') || '5', 10);
+        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+        continue;
+      }
+
+      // Handle other errors
+      if (!response.ok) {
+        throw new ApiError(
+          `API request failed: ${response.status} ${response.statusText}`,
+          response.status
+        );
+      }
+
+      // Parse JSON response
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      lastError = error as Error;
+      
+      // Only retry on network errors or rate limiting
+      if (error instanceof ApiError && error.statusCode !== 429) {
+        throw error;
+      }
+      
+      // Exponential backoff
+      await new Promise(resolve => setTimeout(resolve, retryDelay * Math.pow(2, attempt)));
+    }
+  }
+
+  // If we've exhausted all retries
+  throw lastError || new ApiError('Request failed after multiple retries', 500);
+}
+
+// API interfaces
+interface AuthApi {
+  login(email: string, password: string): Promise<any>;
+  register(email: string, password: string, name: string): Promise<any>;
+  logout(): Promise<void>;
+  getCurrentUser(): Promise<any>;
+}
+
+interface ContentApi {
+  process(content: string, contentType: string, operations: string[]): Promise<any>;
+  getHistory(): Promise<any>;
+  getItemById(id: string): Promise<any>;
+}
+
+interface MetricsApi {
+  getMetrics(): Promise<any>;
+}
+
+// Authentication API implementation
+const auth: AuthApi = {
+  async login(email: string, password: string) {
+    return fetchAPI('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password })
+    });
+  },
+
+  async register(email: string, password: string, name: string) {
+    return fetchAPI('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ email, password, name })
+    });
+  },
+
+  async logout() {
+    await fetchAPI('/auth/logout', {
+      method: 'POST'
+    });
+  },
+
+  async getCurrentUser() {
+    try {
+      const data = await fetchAPI('/auth/me');
+      return data.data.user;
+    } catch (error) {
+      // If unauthorized or any other error occurs during auth check
+      if (error instanceof ApiError && error.statusCode === 401) {
+        return null;
+      }
+      throw error;
+    }
+  }
+};
+
+// Content processing API implementation
+const content: ContentApi = {
+  async process(content: string, contentType: string, operations: string[]) {
+    return fetchAPI('/content/process', {
+      method: 'POST',
+      body: JSON.stringify({ content, contentType, operations })
+    });
+  },
+
+  async getHistory() {
+    const data = await fetchAPI('/content/history');
+    return data.data.items;
+  },
+
+  async getItemById(id: string) {
+    const data = await fetchAPI(`/content/item/${id}`);
+    return data.data.item;
+  }
+};
+
+// Usage metrics API implementation
+const metrics: MetricsApi = {
+  async getMetrics() {
+    const data = await fetchAPI('/metrics');
+    return data.data;
+  }
+};
+
+// Export individual APIs
+export const authApi = auth;
+export const contentApi = content;
+export const metricsApi = metrics;
+
+// Default export for all APIs
+const apiClient = {
+  auth,
+  content,
+  metrics
+};
+
+export default apiClient;

@@ -1,0 +1,580 @@
+/**
+ * API Route: /api/process
+ * Processes content using real content processing API with robust fallbacks
+ */
+import { NextRequest, NextResponse } from 'next/server';
+import { withAuth } from '@/middleware/auth';
+import { withRateLimit } from '@/middleware/rate-limit';
+import { validateProcessRequest } from '@/middleware/validation';
+import { API } from '@/lib/api-module';
+import { mockProcessContent } from '@/lib/mock-processor';
+import { userDb, historyDb } from '@/lib/db';
+import { ProcessRequest } from '@/types/api';
+import jwt from 'jsonwebtoken';
+
+// Configuration flags
+const FORCE_REAL_AI = process.env.FORCE_REAL_AI === 'true';
+const EMERGENCY_FALLBACK = process.env.EMERGENCY_FALLBACK === 'true';
+// Always provide a fallback response if all else fails
+const GUARANTEED_FALLBACK = true; // This ensures we never return an empty response
+
+// Debug environment variables
+const ENV_DEBUG = {
+  NODE_ENV: process.env.NODE_ENV,
+  HF_API_KEY_EXISTS: !!process.env.HUGGING_FACE_API_KEY,
+  HF_API_KEY_LENGTH: process.env.HUGGING_FACE_API_KEY?.length || 0,
+  HF_API_KEY_PREFIX: process.env.HUGGING_FACE_API_KEY?.substring(0, 5) || 'NONE',
+  FORCE_REAL_AI,
+  EMERGENCY_FALLBACK
+};
+
+// Log environment details when the module is loaded
+console.log('========= API ROUTE ENVIRONMENT DEBUG =========');
+console.log(JSON.stringify(ENV_DEBUG, null, 2));
+console.log('=============================================');
+
+/**
+ * Handle POST requests to /api/process
+ */
+export async function POST(req: NextRequest) {
+  // Check for emergency fallback query parameter
+  const url = new URL(req.url);
+  const requestedFallback = url.searchParams.get('fallback') === 'true';
+  
+  // Only use immediate fallback if explicitly requested or if emergency fallback is enabled and we're in development
+  // Otherwise, we'll try real AI first and fall back only if it fails
+  const useImmediateFallback = requestedFallback || (EMERGENCY_FALLBACK && process.env.NODE_ENV === 'development');
+  const useFallback = useImmediateFallback && !FORCE_REAL_AI;
+  
+  // If emergency fallback is enabled and real AI is not forced, bypass API calls but still try to use authentication
+  if (useFallback) {
+    console.log('⚠️ EMERGENCY FALLBACK MODE: Bypassing API calls but preserving authentication');
+    
+    try {
+      const body = await req.json();
+      
+      // Validate we have at least a URL or content
+      if (!body.url && !body.content) {
+        return NextResponse.json({ 
+          success: false, 
+          error: "Either url or content is required" 
+        }, { status: 400 });
+      }
+      
+      // Use mock processor directly
+      console.log('🚨 Using mock processor for emergency fallback');
+      const result = await mockProcessContent({
+        content: body.content || 'Mock content for ' + (body.url || 'unknown URL'),
+        contentType: body.contentType || 'text',
+        options: body.options || {}
+      });
+      
+      // Add metadata to indicate mock fallback
+      const processedResult = {
+        ...result,
+        isRealAiContent: false,
+        isMockFallback: true
+      };
+      
+      // Try to get authenticated user first
+      let userId;
+      try {
+        // Extract auth token and get user (light auth check)
+        const token = req.headers.get('authorization')?.split(' ')[1] || '';
+        if (token) {
+          const decoded = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+          userId = decoded.id;
+          console.log('Using authenticated user ID for history:', userId);
+        }
+      } catch (authError) {
+        console.log('No authenticated user found, using anonymous ID');
+      }
+
+      // If no authenticated user, use anonymous ID
+      userId = userId || 'anon-' + Math.random().toString(36).substring(2, 15);
+      
+      try {
+        // Create history item even without authentication
+        const historyItem = {
+          userId: userId,
+          originalContent: body.content || body.url || 'Unknown content',
+          contentType: body.contentType || 'text',
+          sourceUrl: body.sourceUrl || body.url || '',
+          summary: processedResult.summary,
+          keyQuotes: processedResult.keyQuotes,
+          socialPost: processedResult.socialPost,
+          blogPost: processedResult.blogPost, 
+          title: processedResult.contentMetadata?.title || 'Emergency Fallback Content',
+          processedAt: new Date().toISOString(),
+          contentMetadata: {
+            title: processedResult.contentMetadata?.title || 'Emergency Fallback Content',
+            sourceType: body.contentType || 'text',
+            duration: 'N/A'
+          },
+          isRealAiContent: false,
+          isMockFallback: true
+        };
+        
+        // Try to save to history, but don't block on failure
+        const saved = await historyDb.create(historyItem);
+        console.log('Successfully saved emergency content to history:', saved.id);
+        
+        // Return success with mock data and ID
+        return NextResponse.json({
+          success: true,
+          data: {
+            id: saved.id,
+            ...processedResult
+          }
+        });
+      } catch (dbError) {
+        console.error('Failed to save emergency content to history:', dbError);
+        // Continue even if saving fails - return data without ID
+        return NextResponse.json({
+          success: true,
+          data: processedResult
+        });
+      }
+    } catch (error) {
+      console.error('Emergency fallback error:', error);
+      return NextResponse.json({
+        success: false,
+        error: 'Emergency fallback failed',
+        details: String(error)
+      }, { status: 500 });
+    }
+  }
+  
+  // Normal processing with API calls
+  try {
+    // Log the raw request body for debugging
+    const rawBody = await req.clone().json();
+    console.log('Process API - Raw request body:', JSON.stringify(rawBody, null, 2));
+    
+    // Step 1: Apply rate limiting
+    return await withRateLimit(req, async (rateLimitedReq) => {
+      // Step 2: Apply authentication
+      return await withAuth(rateLimitedReq, async (authenticatedReq, user) => {
+        console.log('Process API - Authenticated user:', {
+          id: user.id,
+          email: user.email,
+          name: user.name
+        });
+        
+        // Step 3: Validate the request body
+        return await validateProcessRequest(authenticatedReq, async (validatedReq, data) => {
+          console.log('Process API - Validated data:', JSON.stringify(data, null, 2));
+          try {
+            // Log API configuration for debugging
+            console.log('========= PROCESSING REQUEST DEBUG =========');
+            console.log('API Key status:', {
+              exists: !!process.env.HUGGING_FACE_API_KEY,
+              prefix: process.env.HUGGING_FACE_API_KEY?.substring(0, 5) || 'NONE',
+              length: process.env.HUGGING_FACE_API_KEY?.length || 0
+            });
+            console.log('Content type:', data.contentType);
+            console.log('Content source:',
+              data.content ? `Content (length: ${data.content.length})` : 
+              data.url ? `URL: ${data.url}` : 'None provided');
+            console.log('=============================================');
+
+            // Step 4: Check user limits
+            const userData = await userDb.findById(user.id);
+            if (!userData) {
+              return NextResponse.json(
+                { success: false, error: 'User not found' },
+                { status: 404 }
+              );
+            }
+            
+            if (userData.usageCount >= userData.maxUsage) {
+              return NextResponse.json(
+                { 
+                  success: false, 
+                  error: `Usage limit reached. You have used ${userData.usageCount}/${userData.maxUsage} requests.` 
+                },
+                { status: 403 }
+              );
+            }
+            
+            // Step 5: Process the content
+            let processedResult;
+            try {
+              // Log request information
+              if (data.content) {
+                console.log(`Processing ${data.contentType} content, length: ${data.content.length} chars`);
+              } else if (data.url) {
+                console.log(`Processing ${data.contentType} URL: ${data.url}`);
+              } else {
+                console.log(`Processing ${data.contentType} with no content or URL`);
+              }
+              
+              // Add progress callback for debugging
+              const progressCallback = (update: { status: string; step: string }) => {
+                console.log(`Processing progress: ${update.status} - ${update.step}`);
+              };
+              
+              // FORCE REAL AI: Attempt with real processors first with strict enforcement
+              if (FORCE_REAL_AI) {
+                console.log('🔴 FORCE REAL AI MODE ENABLED: Using only real AI processors with strict enforcement');
+                let result;
+                try {
+                  // Try Hugging Face first if available and enabled
+                  if (process.env.HUGGING_FACE_API_KEY && process.env.USE_HUGGING_FACE_API === 'true') {
+                    console.log('Using Hugging Face processor with API key');
+                    try {
+                      // Cast data options to expected type to fix TypeScript error
+                      const processData: ProcessRequest = {
+                        ...data,
+                        options: data.options as ProcessRequest['options']
+                      };
+                      result = await API.processContent(processData, progressCallback);
+                      console.log('✅ Successfully generated content with Hugging Face');
+                    } catch (hfError) {
+                      console.error('Hugging Face processing failed:', hfError);
+                      
+                      // Only try OpenAI if Hugging Face fails AND OpenAI is not disabled
+                      if (process.env.DISABLE_OPENAI !== 'true' && process.env.OPENAI_API_KEY) {
+                        throw hfError; // Re-throw to try OpenAI
+                      } else {
+                        // If OpenAI is disabled or no key available, and emergency fallback is disabled, fail hard
+                        if (!EMERGENCY_FALLBACK) {
+                          throw new Error('Hugging Face API failed and OpenAI fallback is disabled. ' + String(hfError));
+                        } else {
+                          throw hfError; // Allow fallback if emergency fallback is enabled
+                        }
+                      }
+                    }
+                  }
+                  // Try OpenAI if no Hugging Face or it's disabled
+                  else if (process.env.OPENAI_API_KEY && process.env.DISABLE_OPENAI !== 'true') {
+                    console.log('Using OpenAI processor with API key');
+                    try {
+                      // Cast data options to expected type to fix TypeScript error
+                      const processData: ProcessRequest = {
+                        ...data,
+                        options: data.options as ProcessRequest['options']
+                      };
+                      // OpenAI processing is now handled through the API module
+                      throw new Error('OpenAI processing is not implemented in the new API module');
+                      console.log('✅ Successfully generated content with OpenAI');
+                    } catch (openAiError) {
+                      console.error('OpenAI processing failed:', openAiError);
+                      
+                      // If OpenAI fails and emergency fallback is disabled, fail hard
+                      if (!EMERGENCY_FALLBACK) {
+                        throw new Error('OpenAI API failed and emergency fallback is disabled. ' + String(openAiError));
+                      } else {
+                        throw openAiError; // Allow fallback if emergency fallback is enabled
+                      }
+                    }
+                  }
+                  // No API keys available
+                  else {
+                    throw new Error('No AI API keys configured. Set HUGGING_FACE_API_KEY or OPENAI_API_KEY in .env.local');
+                  }
+                  
+                  // If we got a successful result, use it
+                  if (result) {
+                    processedResult = {
+                      ...result,
+                      isRealAiContent: true,
+                      isMockFallback: false
+                    };
+                  } else {
+                    throw new Error('AI processing completed but returned no result');
+                  }
+                } catch (processingError) {
+                  console.error('❌ ALL AI PROCESSING FAILED:', processingError);
+                  
+                  // If emergency fallback is allowed, use mock processor
+                  if (EMERGENCY_FALLBACK) {
+                    console.log('🚨 EMERGENCY FALLBACK: Using mock data due to API failure');
+                    // Cast data options to expected type to fix TypeScript error
+                    const processData: ProcessRequest = {
+                      ...data,
+                      options: data.options as ProcessRequest['options']
+                    };
+                    const mockResult = await mockProcessContent(processData);
+                    processedResult = {
+                      ...mockResult,
+                      isRealAiContent: false,
+                      isMockFallback: true
+                    };
+                  } else {
+                    // When FORCE_REAL_AI is true and EMERGENCY_FALLBACK is false, we never use mock data
+                    console.error('❌❌❌ STRICT REAL AI MODE: No fallbacks allowed, returning error to client');
+                    return NextResponse.json({
+                      success: false,
+                      error: 'Failed to generate AI content. API services are unavailable and fallbacks are disabled.',
+                      details: String(processingError)
+                    }, { status: 500 });
+                  }
+                }
+              } 
+              // If not forcing real AI, follow normal processor selection logic
+              else {
+                console.log('Using standard processor selection logic');
+                // Cast data options to expected type to fix TypeScript error
+                const processData: ProcessRequest = {
+                  ...data,
+                  options: data.options as ProcessRequest['options']
+                };
+                const result = await API.processContent(processData, progressCallback);
+                processedResult = {
+                  ...result,
+                  isRealAiContent: true,
+                  isMockFallback: false
+                };
+              }
+
+              // Calculate processing time
+              const processingTime = Date.now() - new Date(processedResult.processedAt).getTime();
+              console.log(`Processing completed in ${processingTime}ms`);
+              
+              // Step 6: Save to history
+              // Make sure originalContent is always set to something
+              const originalContentToSave = data.content || data.url || 'No content provided';
+              
+              // Determine the sourceUrl intelligently
+              let sourceUrl = '';
+              if (data.url) {
+                // If we have a URL in the data, use that as the source
+                sourceUrl = data.url;
+              } else if ((data.options as any)?.sourceUrl) {
+                // Otherwise check if source URL is in options
+                sourceUrl = (data.options as any).sourceUrl;
+              }
+              
+              const historyItem = {
+                userId: user.id,
+                originalContent: originalContentToSave,
+                contentType: data.contentType,
+                sourceUrl: sourceUrl,
+                summary: processedResult.summary,
+                keyQuotes: processedResult.keyQuotes,
+                socialPost: processedResult.socialPost,
+                blogPost: processedResult.blogPost,
+                title: processedResult.contentMetadata?.title || 'Untitled Content',
+                processedAt: new Date().toISOString(),
+                contentMetadata: {
+                  title: processedResult.contentMetadata?.title || 'Untitled Content',
+                  sourceType: data.contentType,
+                  duration: processedResult.contentMetadata?.duration || 'N/A'
+                },
+                isRealAiContent: processedResult.isRealAiContent,
+                isMockFallback: processedResult.isMockFallback || false
+              };
+              
+              const saved = await historyDb.create(historyItem);
+              
+              // Step 7: Update user usage count
+              await userDb.incrementUsage(user.id);
+              
+              // Return success response
+              return NextResponse.json({
+                success: true,
+                data: {
+                  id: saved.id,
+                  ...processedResult
+                }
+              });
+            } catch (error) {
+              console.error('Processing error:', error);
+              return NextResponse.json({
+                success: false,
+                error: 'Processing failed',
+                details: String(error)
+              }, { status: 500 });
+            }
+          } catch (error) {
+            console.error('Unexpected error:', error);
+            return NextResponse.json({
+              success: false,
+              error: 'An unexpected error occurred',
+              details: String(error)
+            }, { status: 500 });
+          }
+        }
+      // Try OpenAI if no Hugging Face or it's disabled
+      else if (process.env.OPENAI_API_KEY && process.env.DISABLE_OPENAI !== 'true') {
+        console.log('Using OpenAI processor with API key');
+        try {
+          // Cast data options to expected type to fix TypeScript error
+          const processData: ProcessRequest = {
+            ...data,
+            options: data.options as ProcessRequest['options']
+          };
+          // OpenAI processing is now handled through the API module
+          throw new Error('OpenAI processing is not implemented in the new API module');
+          console.log('✅ Successfully generated content with OpenAI');
+        } catch (openAiError) {
+          console.error('OpenAI processing failed:', openAiError);
+          
+          // If OpenAI fails and emergency fallback is disabled, fail hard
+          if (!EMERGENCY_FALLBACK) {
+            throw new Error('OpenAI API failed and emergency fallback is disabled. ' + String(openAiError));
+          } else {
+            throw openAiError; // Allow fallback if emergency fallback is enabled
+          }
+        }
+      }
+      // No API keys available
+      else {
+        throw new Error('No AI API keys configured. Set HUGGING_FACE_API_KEY or OPENAI_API_KEY in .env.local');
+      }
+      
+      // If we got a successful result, use it
+      if (result) {
+        processedResult = {
+          ...result,
+          isRealAiContent: true,
+          isMockFallback: false
+        };
+      } else {
+        throw new Error('AI processing completed but returned no result');
+      }
+    } catch (processingError) {
+      console.error('❌ ALL AI PROCESSING FAILED:', processingError);
+      
+      // If emergency fallback is allowed, use mock processor
+      if (EMERGENCY_FALLBACK) {
+        console.log('🚨 EMERGENCY FALLBACK: Using mock data due to API failure');
+        // Cast data options to expected type to fix TypeScript error
+        const processData: ProcessRequest = {
+          ...data,
+          options: data.options as ProcessRequest['options']
+        };
+        const mockResult = await mockProcessContent(processData);
+        processedResult = {
+          ...mockResult,
+          isRealAiContent: false,
+          isMockFallback: true
+        };
+      } else {
+        // When FORCE_REAL_AI is true and EMERGENCY_FALLBACK is false, we never use mock data
+        console.error('❌❌❌ STRICT REAL AI MODE: No fallbacks allowed, returning error to client');
+        return NextResponse.json({
+          success: false,
+          error: 'Failed to generate AI content. API services are unavailable and fallbacks are disabled.',
+          details: String(processingError)
+        }, { status: 500 });
+      }
+    }
+  } 
+  // If not forcing real AI, follow normal processor selection logic
+  else {
+    console.log('Using standard processor selection logic');
+    // Cast data options to expected type to fix TypeScript error
+    const processData: ProcessRequest = {
+      ...data,
+      options: data.options as ProcessRequest['options']
+    };
+    const result = await API.processContent(processData, progressCallback);
+    processedResult = {
+      ...result,
+      isRealAiContent: true,
+      isMockFallback: false
+    };
+  }
+
+  // Calculate processing time
+  const processingTime = Date.now() - new Date(processedResult.processedAt).getTime();
+  console.log(`Processing completed in ${processingTime}ms`);
+  
+  // Step 6: Save to history
+  // Make sure originalContent is always set to something
+  const originalContentToSave = data.content || data.url || 'No content provided';
+  
+  // Determine the sourceUrl intelligently
+  let sourceUrl = '';
+  if (data.url) {
+    // If we have a URL in the data, use that as the source
+    sourceUrl = data.url;
+  } else if ((data.options as any)?.sourceUrl) {
+    // Otherwise check if source URL is in options
+    sourceUrl = (data.options as any).sourceUrl;
+  }
+  
+  const historyItem = {
+    userId: user.id,
+    originalContent: originalContentToSave,
+    contentType: data.contentType,
+    sourceUrl: sourceUrl,
+    summary: processedResult.summary,
+    keyQuotes: processedResult.keyQuotes,
+    socialPost: processedResult.socialPost,
+    blogPost: processedResult.blogPost,
+    title: processedResult.contentMetadata?.title || 'Untitled Content',
+    processedAt: new Date().toISOString(),
+    contentMetadata: {
+      title: processedResult.contentMetadata?.title || 'Untitled Content',
+      sourceType: data.contentType,
+      duration: processedResult.contentMetadata?.duration || 'N/A'
+    },
+    isRealAiContent: processedResult.isRealAiContent,
+    isMockFallback: processedResult.isMockFallback || false
+  };
+  
+  const saved = await historyDb.create(historyItem);
+  
+  // Step 7: Update user usage count
+  await userDb.incrementUsage(user.id);
+  
+  // Return success response
+  return NextResponse.json({
+    success: true,
+    data: {
+      id: saved.id,
+      ...processedResult
+    }
+  });
+} catch (error) {
+  console.error('Error processing content:', error);
+  
+  // If GUARANTEED_FALLBACK is enabled, always return a valid response
+  if (GUARANTEED_FALLBACK) {
+    console.log('🚨 GUARANTEED FALLBACK: Providing mock response due to processing error');
+    
+    // Generate a mock response with fallback data
+    const mockResult = await mockProcessContent({
+      content: req.body?.content || 'Fallback content',
+      contentType: req.body?.contentType || 'text',
+      url: req.body?.url || '',
+      options: req.body?.options || {}
+    });
+    
+    // Return the mock result with a success status but include error information
+    return NextResponse.json({
+      success: true,
+      item: {
+        ...mockResult,
+        isRealAiContent: false,
+        isMockFallback: true,
+        fallbackReason: 'API processing error'
+      },
+      _debug: {
+        error: error instanceof Error ? error.message : String(error),
+        timestamp: new Date().toISOString(),
+        usingFallback: true
+      }
+    });
+  }
+  
+  // If GUARANTEED_FALLBACK is disabled, return an error response
+  return NextResponse.json(
+    { 
+      success: false, 
+      error: 'Failed to process content',
+      errorDetails: error instanceof Error ? error.message : String(error)
+    },
+    { status: 500 }
+  );
+} catch (error) {
+  console.error('Unexpected error:', error);
+  return NextResponse.json({
+    success: false,
+    error: 'An unexpected error occurred',
+    details: String(error)
+  }, { status: 500 });
+}

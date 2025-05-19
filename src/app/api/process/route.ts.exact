@@ -1,0 +1,69 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { mockProcessContent } from '@/lib/mock-processor';
+
+/**
+ * Handle POST requests to /api/process
+ * This is a simplified fallback-only version with exact response structure matching
+ */
+export async function POST(req: NextRequest) {
+  try {
+    // Parse the request body
+    const body = await req.json();
+    
+    // Log request for debugging
+    console.log('Processing request:', {
+      url: body.url,
+      contentType: body.contentType,
+      contentLength: body.content?.length || 0
+    });
+    
+    // Generate mock content
+    const result = await mockProcessContent(body);
+    console.log('Generated mock content successfully');
+    
+    // Return with the EXACT structure the client expects
+    // This matches the structure in api-client.ts fallbackData
+    return NextResponse.json({
+      success: true,
+      data: {
+        id: `mock-${Date.now()}`,
+        summary: result.summary,
+        keyQuotes: result.keyQuotes,
+        socialPost: result.socialPost,
+        blogPost: result.blogPost,
+        isRealAiContent: false,
+        isMockFallback: true,
+        processedAt: new Date().toISOString(),
+        contentMetadata: result.contentMetadata || {
+          title: "Mock Content",
+          sourceType: body.contentType,
+          duration: "N/A"
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error in fallback processor:', error);
+    
+    // Return a generic mock response if everything fails
+    return NextResponse.json({
+      success: true,
+      data: {
+        id: `fallback-${Date.now()}`,
+        summary: "This is fallback content because the API is currently unavailable.",
+        keyQuotes: [
+          { text: "Fallback content - API unavailable", timestamp: "N/A" }
+        ],
+        socialPost: "Fallback social post - API unavailable",
+        blogPost: "# Fallback Content\n\nAPI service is currently unavailable.",
+        isRealAiContent: false,
+        isMockFallback: true,
+        processedAt: new Date().toISOString(),
+        contentMetadata: {
+          title: "Fallback Content",
+          sourceType: "text",
+          duration: "N/A"
+        }
+      }
+    });
+  }
+}

@@ -1,0 +1,299 @@
+/**
+ * API Route: /api/process
+ * Processes content using Ollama or Hugging Face with robust fallbacks
+ */
+import { NextRequest, NextResponse } from 'next/server';
+import { withAuth } from '@/middleware/auth';
+import { withRateLimit } from '@/middleware/rate-limit';
+import { validateProcessRequest } from '@/middleware/validation';
+import { API } from '@/lib/api-module';
+import { mockProcessContent } from '@/lib/mock-processor';
+import { userDb, historyDb } from '@/lib/db';
+import { ProcessRequest, ProcessResponse } from '@/types/api';
+
+// Configuration flags
+const FORCE_REAL_AI = process.env.FORCE_REAL_AI === 'true';
+const EMERGENCY_FALLBACK = process.env.EMERGENCY_FALLBACK === 'true';
+// Always provide a fallback response if all else fails
+const GUARANTEED_FALLBACK = true; // This ensures we never return an empty response
+
+// Debug environment variables
+const ENV_DEBUG = {
+  NODE_ENV: process.env.NODE_ENV,
+  HF_API_KEY_EXISTS: !!process.env.HUGGING_FACE_API_KEY,
+  HF_API_KEY_LENGTH: process.env.HUGGING_FACE_API_KEY?.length || 0,
+  HF_API_KEY_PREFIX: process.env.HUGGING_FACE_API_KEY?.substring(0, 5) || 'NONE',
+  FORCE_REAL_AI,
+  EMERGENCY_FALLBACK
+};
+
+// Log environment details when the module is loaded
+console.log('========= API ROUTE ENVIRONMENT DEBUG =========');
+console.log(JSON.stringify(ENV_DEBUG, null, 2));
+console.log('=============================================');
+
+/**
+ * Helper function to provide a mock response when needed
+ */
+function provideMockResponse(id: string, reason: string) {
+  console.log(`⚠️ Using mock response: ${reason}`);
+  const mockResult = mockProcessContent({
+    url: `https://example.com/${id}`,
+    content: 'This is a fallback content for testing.',
+    contentType: 'text',
+    options: {
+      maxSummaryLength: 100,
+      includeKeyQuotes: true,
+      includeSocialPost: true
+    }
+  });
+  
+  return NextResponse.json({
+    success: true,
+    result: mockResult,
+    message: `Using mock data: ${reason}`,
+    provider: 'mock'
+  });
+}
+
+/**
+ * Handle POST requests to /api/process
+ */
+export async function POST(req: NextRequest) {
+  // Check for emergency fallback query parameter
+  const url = new URL(req.url);
+  const requestedFallback = url.searchParams.get('fallback') === 'true';
+  
+  // Only use immediate fallback if explicitly requested or if emergency fallback is enabled and we're in development
+  // Otherwise, we'll try real AI first and fall back only if it fails
+  const useImmediateFallback = requestedFallback || (EMERGENCY_FALLBACK && process.env.NODE_ENV === 'development');
+  const useFallback = useImmediateFallback && !FORCE_REAL_AI;
+  
+  // If emergency fallback is enabled and real AI is not forced, bypass API calls but still try to use authentication
+  if (useFallback) {
+    console.log('⚠️ EMERGENCY FALLBACK MODE: Bypassing API calls but preserving authentication');
+    
+    try {
+      // Generate a unique ID for this request
+      const id = Math.random().toString(36).substring(2, 15);
+      
+      // Apply rate limiting
+      return await withRateLimit(req, async (rateLimitedReq) => {
+        // Apply authentication
+        return await withAuth(rateLimitedReq, async (authenticatedReq, user) => {
+          // Apply validation
+          return await validateProcessRequest(authenticatedReq, async (validatedReq, data) => {
+            console.log('Using mock processor for fallback mode');
+            
+            // Generate mock content
+            const mockResult = mockProcessContent(data);
+            
+            // Save to history if user is authenticated
+            if (user && user.id) {
+              try {
+                await historyDb.create({
+                  userId: user.id,
+                  url: data.url || '',
+                  content: data.content || '',
+                  contentType: data.contentType,
+                  result: mockResult,
+                  timestamp: new Date().toISOString()
+                });
+                console.log('✅ Saved to history');
+              } catch (historyError) {
+                console.error('Failed to save to history:', historyError);
+              }
+            }
+            
+            return NextResponse.json({
+              success: true,
+              result: mockResult,
+              message: 'Using mock data (emergency fallback mode)',
+              provider: 'mock'
+            });
+          });
+        });
+      });
+    } catch (error) {
+      console.error('Error in fallback mode:', error);
+      return provideMockResponse('fallback-error', 'Error in fallback processing');
+    }
+  }
+  
+  // Normal processing path (not using immediate fallback)
+  try {
+    // Log the raw request body for debugging
+    const rawBody = await req.clone().json();
+    console.log('Process API - Raw request body:', JSON.stringify(rawBody, null, 2));
+    
+    // Step 1: Apply rate limiting
+    return await withRateLimit(req, async (rateLimitedReq) => {
+      // Step 2: Apply authentication
+      return await withAuth(rateLimitedReq, async (authenticatedReq, user) => {
+        console.log('Process API - Authenticated user:', {
+          id: user.id,
+          email: user.email,
+          name: user.name
+        });
+        
+        // Step 3: Validate the request data
+        return await validateProcessRequest(authenticatedReq, async (validatedReq, data) => {
+          console.log('Process API - Validated data:', JSON.stringify(data, null, 2));
+          
+          try {
+            // Log API configuration for debugging
+            console.log('========= PROCESSING REQUEST DEBUG =========');
+            console.log('API Key status:', {
+              exists: !!process.env.HUGGING_FACE_API_KEY,
+              length: process.env.HUGGING_FACE_API_KEY?.length || 0
+            });
+            console.log('Force real AI:', FORCE_REAL_AI);
+            console.log('Emergency fallback:', EMERGENCY_FALLBACK);
+            console.log('============================================');
+            
+            // Progress callback for streaming updates (not implemented yet)
+            const progressCallback = (progress: number, status: string) => {
+              console.log(`Progress: ${progress}%, Status: ${status}`);
+              // Future: implement streaming updates
+            };
+            
+            try {
+              // Log request information
+              if (data.content) {
+                console.log(`Processing ${data.contentType} content, length: ${data.content.length} chars`);
+              } else if (data.url) {
+                console.log(`Processing URL: ${data.url}`);
+              } else {
+                console.log('No content or URL provided');
+              }
+              
+              // Cast data options to expected type to fix TypeScript error
+              const processData: ProcessRequest = {
+                ...data,
+                options: data.options as ProcessRequest['options']
+              };
+              
+              let result: ProcessResponse;
+              
+              // Try Ollama first if enabled
+              if (process.env.USE_OLLAMA === 'true') {
+                try {
+                  console.log('Trying Ollama processor');
+                  result = await API.processContent(processData, progressCallback);
+                  console.log('✅ Successfully generated content with Ollama');
+                  
+                  // Save to history if user is authenticated
+                  if (user && user.id) {
+                    try {
+                      await historyDb.create({
+                        userId: user.id,
+                        url: data.url || '',
+                        content: data.content || '',
+                        contentType: data.contentType,
+                        result: result,
+                        timestamp: new Date().toISOString()
+                      });
+                      console.log('✅ Saved to history');
+                    } catch (historyError) {
+                      console.error('Failed to save to history:', historyError);
+                    }
+                  }
+                  
+                  // Return the processed result
+                  return NextResponse.json({
+                    success: true,
+                    result: result,
+                    message: 'Content processed successfully with Ollama',
+                    provider: result.provider || 'ollama'
+                  });
+                } catch (ollamaError) {
+                  console.error('Ollama processing failed, trying Hugging Face:', ollamaError);
+                  // Continue to Hugging Face
+                }
+              }
+              
+              // Try Hugging Face if Ollama failed or not enabled
+              if (process.env.HUGGING_FACE_API_KEY && process.env.DISABLE_HUGGINGFACE !== 'true') {
+                try {
+                  console.log('Trying Hugging Face processor');
+                  result = await API.processContent(processData, progressCallback);
+                  console.log('✅ Successfully generated content with Hugging Face');
+                  
+                  // Save to history if user is authenticated
+                  if (user && user.id) {
+                    try {
+                      await historyDb.create({
+                        userId: user.id,
+                        url: data.url || '',
+                        content: data.content || '',
+                        contentType: data.contentType,
+                        result: result,
+                        timestamp: new Date().toISOString()
+                      });
+                      console.log('✅ Saved to history');
+                    } catch (historyError) {
+                      console.error('Failed to save to history:', historyError);
+                    }
+                  }
+                  
+                  // Return the processed result
+                  return NextResponse.json({
+                    success: true,
+                    result: result,
+                    message: 'Content processed successfully with Hugging Face',
+                    provider: result.provider || 'huggingface'
+                  });
+                } catch (hfError) {
+                  console.error('Hugging Face processing failed:', hfError);
+                  throw hfError; // Let the outer catch handle it
+                }
+              }
+              
+              // If we get here, no AI processors were available or they all failed
+              throw new Error('No AI processors available. Please configure Ollama or Hugging Face.');
+              
+            } catch (processingError) {
+              console.error('❌ ALL AI PROCESSING FAILED:', processingError);
+              
+              // Use mock processor as fallback
+              console.log('⚠️ Using mock processor as fallback');
+              return provideMockResponse(
+                data.url || 'content-' + Math.random().toString(36).substring(2, 7),
+                'All AI processing failed: ' + String(processingError)
+              );
+            }
+          } catch (error) {
+            console.error('Unexpected error:', error);
+            
+            // If GUARANTEED_FALLBACK is enabled, always return a valid response
+            if (GUARANTEED_FALLBACK) {
+              return provideMockResponse(
+                data?.url || 'error-' + Math.random().toString(36).substring(2, 7),
+                'Unexpected server error, using fallback data'
+              );
+            }
+            
+            return NextResponse.json({
+              success: false,
+              error: 'An unexpected error occurred',
+              details: String(error)
+            }, { status: 500 });
+          }
+        });
+      });
+    });
+  } catch (error) {
+    console.error('Error processing content:', error);
+    
+    // If GUARANTEED_FALLBACK is enabled, always return a valid response
+    if (GUARANTEED_FALLBACK) {
+      return provideMockResponse('error', 'Unexpected server error, using fallback data');
+    }
+    
+    return NextResponse.json({
+      success: false,
+      error: 'An unexpected error occurred',
+      details: String(error)
+    }, { status: 500 });
+  }
+}
