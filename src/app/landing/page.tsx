@@ -120,15 +120,15 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="flex-1 container mx-auto px-4 py-16 md:py-24 flex flex-col items-center justify-center text-center">
         <h1 className="text-4xl md:text-6xl font-bold max-w-4xl leading-tight mb-6">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">Save 80% of your time</span> while capturing all essential knowledge
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">AI Summarizer for Podcasts, Videos & Articles</span> - Save Hours Every Week
         </h1>
         
         <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-2xl mb-6">
-          Snipit transforms hours of content into minutes of focused learning with AI-powered summaries of podcasts, videos, and articles.
+          Snipit uses advanced AI to transform hours of content into minutes of focused learning with intelligent summaries and key insights extraction.
         </p>
         
         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mb-10">
-          Never miss key insights or waste time on fluff content again. Perfect for researchers, students, professionals, and lifelong learners.
+          Our podcast summary tool, video content summarizer, and article summarization engine help you absorb 10x more information in a fraction of the time. Perfect for researchers, students, professionals, and lifelong learners.
         </p>
         
         <button
@@ -143,34 +143,34 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 w-full max-w-5xl">
           {[
             {
-              title: 'Podcast Summaries',
-              description: 'Transform 2-hour podcast episodes into 5-minute reads',
+              title: 'AI Podcast Summarizer',
+              description: 'Transform 2-hour podcast episodes into 5-minute reads with our intelligent audio summarization tool',
               benefits: [
-                'Key insights and takeaways highlighted',
-                'Timestamps for important moments',
-                'Searchable transcripts with context'
+                'Essential insights and key takeaways highlighted',
+                'Precise timestamps for important segments',
+                'Fully searchable podcast transcripts with context'
               ],
               icon: 'Headphones',
               gradient: 'from-pink-500 to-orange-500'
             },
             {
-              title: 'Video Highlights',
-              description: 'Watch a 30-second summary instead of a 20-minute video',
+              title: 'Video Content Summarization',
+              description: 'Our video summarizer condenses 20-minute videos into 30-second highlights you can quickly digest',
               benefits: [
-                'Auto-generated chapter markers',
-                'Visual key point extraction',
-                'Citation links to original content'
+                'Smart auto-generated chapter markers',
+                'AI-powered visual key point extraction',
+                'Original source citation with timestamps'
               ],
               icon: 'Video',
               gradient: 'from-blue-500 to-teal-500'
             },
             {
-              title: 'Article Extracts',
-              description: 'Distill 5,000-word articles into 500-word essentials',
+              title: 'Article Summary Generator',
+              description: 'Our article summarizer distills 5,000-word articles into 500-word essential summaries',
               benefits: [
-                'Bullet-point summaries for quick scanning',
-                'Source verification and fact-checking',
-                'Related content recommendations'
+                'Structured bullet-point summaries for quick scanning',
+                'AI-powered source verification and fact-checking',
+                'Smart related content recommendations'
               ],
               icon: 'FileText',
               gradient: 'from-purple-500 to-indigo-500'
@@ -206,10 +206,13 @@ export default function LandingPage() {
       >
         <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-50 backdrop-blur-sm p-8 md:p-12 rounded-3xl border border-gray-200 dark:border-gray-700 shadow-lg">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center text-gray-900 dark:text-white">
-            Get Early Access
+            Get Early Access to Our AI Content Summarization Tools
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 text-center mb-8">
-            Join our waitlist to be among the first to experience Snipit when we launch.
+          <p className="text-gray-600 dark:text-gray-300 text-center mb-4">
+            Join our waitlist to be the first to use Snipit's podcast summarizer, video content analyzer, and article extractor when we launch.
+          </p>
+          <p className="text-gray-500 dark:text-gray-400 text-center mb-8 text-sm">
+            Our AI-powered summarization technology helps busy professionals, researchers, and students save hours every week by extracting key insights from long-form content.
           </p>
 
           {isSubmitted ? (
