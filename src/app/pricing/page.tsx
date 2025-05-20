@@ -12,37 +12,54 @@ export default function PricingPage() {
   const router = useRouter();
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
   
-  // Simple feature comparison
+  // New pricing tiers based on updated structure
   const plans = [
     {
       name: "Free",
-      description: "For casual users and small projects",
+      description: "Get started with essential summaries",
       price: billingCycle === "monthly" ? 0 : 0,
       features: [
-        { name: "5 uploads per month", included: true },
-        { name: "Basic summaries", included: true },
-        { name: "Key quotes extraction", included: true },
-        { name: "Simple social media post", included: true },
-        { name: "Blog post generation", included: false },
+        { name: "3 summaries per month", included: true },
+        { name: "Powered by GPT-3.5", included: true },
+        { name: "Whisper voice transcription", included: true },
+        { name: "Basic summary format", included: true },
         { name: "Priority processing", included: false },
-        { name: "Custom branding", included: false },
-        { name: "API access", included: false },
+        { name: "GPT-4 model access", included: false },
+        { name: "File uploads", included: false },
+        { name: "Custom summary styles", included: false },
       ],
     },
     {
       name: "Pro",
-      description: "For professionals and teams",
-      price: billingCycle === "monthly" ? 19 : 190,
-      badge: billingCycle === "yearly" ? "Save $38" : null,
+      description: "More power for regular users",
+      price: billingCycle === "monthly" ? 5 : 50,
+      badge: billingCycle === "yearly" ? "Save $10" : null,
       features: [
-        { name: "Unlimited uploads", included: true },
-        { name: "Enhanced summaries with insights", included: true },
-        { name: "Advanced quotes with context", included: true },
-        { name: "Multiple social media formats", included: true },
-        { name: "Blog post generation", included: true },
+        { name: "100 summaries per month", included: true },
+        { name: "Powered by GPT-3.5", included: true },
+        { name: "Whisper voice transcription", included: true },
         { name: "Priority processing", included: true },
-        { name: "Custom branding", included: true },
-        { name: "API access", included: true },
+        { name: "GPT-4 on demand for long-form", included: true },
+        { name: "Basic file uploads", included: true },
+        { name: "Standard UI", included: true },
+        { name: "Custom summary styles", included: false },
+      ],
+    },
+    {
+      name: "Premium",
+      description: "Maximum power and customization",
+      price: billingCycle === "monthly" ? 15 : 150,
+      badge: billingCycle === "yearly" ? "Save $30" : null,
+      highlight: true,
+      features: [
+        { name: "500 summaries per month", included: true },
+        { name: "Access to GPT-4 Turbo", included: true },
+        { name: "Whisper voice transcription", included: true },
+        { name: "Priority processing", included: true },
+        { name: "Enhanced file uploads", included: true },
+        { name: "Advanced UI features", included: true },
+        { name: "Custom summary styles", included: true },
+        { name: "Educational, bullet-list formats", included: true },
       ],
     }
   ];
@@ -83,19 +100,22 @@ export default function PricingPage() {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {plans.map((plan) => (
           <Card 
             key={plan.name}
-            className={`overflow-hidden ${plan.name === "Pro" ? "border-indigo-600" : ""}`}
+            className={`overflow-hidden ${plan.highlight ? "border-purple-600 shadow-lg" : plan.name === "Pro" ? "border-blue-500" : ""} ${plan.highlight ? "scale-105 z-10" : ""}`}
           >
             {plan.badge && (
               <div className="absolute top-0 right-0 mt-4 mr-4">
                 <Badge className="bg-green-600 hover:bg-green-700">{plan.badge}</Badge>
               </div>
             )}
-            <CardHeader className={`${plan.name === "Pro" ? "bg-primary/5 dark:bg-primary/10" : ""}`}>
-              <CardTitle className="text-2xl">{plan.name}</CardTitle>
+            <CardHeader className={`${plan.highlight ? "bg-purple-600/10 dark:bg-purple-600/20" : plan.name === "Pro" ? "bg-blue-500/5 dark:bg-blue-500/10" : ""}`}>
+              <CardTitle className={`text-2xl ${plan.highlight ? "text-purple-600 dark:text-purple-400" : plan.name === "Pro" ? "text-blue-600 dark:text-blue-400" : ""}`}>
+                {plan.name}
+                {plan.highlight && <span className="ml-2 inline-block px-2 py-0.5 text-xs rounded-full bg-purple-600 text-white">Popular</span>}
+              </CardTitle>
               <CardDescription>{plan.description}</CardDescription>
               <div className="mt-4">
                 <span className="text-4xl font-bold">
@@ -125,19 +145,32 @@ export default function PricingPage() {
             </CardContent>
             <CardFooter className="flex flex-col">
               <Button 
-                className={`w-full mb-3 ${
-                  plan.name === "Pro" ? "bg-indigo-600 hover:bg-indigo-700" : ""
-                }`}
+                className={`w-full mb-3 ${plan.highlight 
+                  ? "bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800" 
+                  : plan.name === "Pro" 
+                    ? "bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800" 
+                    : ""}`}
                 asChild
               >
-                <Link href={plan.name === "Free" ? "/register" : "/register?plan=pro"}>
-                  {plan.name === "Free" ? "Get Started" : "Subscribe Now"}
+                <Link href={plan.name === "Free" 
+                  ? "/register" 
+                  : plan.name === "Pro" 
+                    ? "/register?plan=pro" 
+                    : "/register?plan=premium"
+                }>
+                  {plan.name === "Free" 
+                    ? "Get Started" 
+                    : plan.highlight 
+                      ? "Go Premium" 
+                      : "Subscribe Now"}
                 </Link>
               </Button>
               <p className="text-xs text-muted-foreground text-center">
-                {plan.name === "Pro" 
-                  ? "Cancel anytime, no questions asked"
-                  : "No credit card required"}
+                {plan.name === "Free" 
+                  ? "No credit card required" 
+                  : plan.highlight 
+                    ? "Full access to all premium features" 
+                    : "Cancel anytime, no questions asked"}
               </p>
             </CardFooter>
           </Card>
