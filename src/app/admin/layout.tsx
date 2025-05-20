@@ -15,27 +15,75 @@ export default function AdminLayout({
   const { user, isLoading } = useAuth();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
-  // Check if the user is an admin
+  // Debug output helper
   useEffect(() => {
-    // If the auth check is complete and user is not logged in, redirect to login
-    if (!isLoading && !user) {
-      router.push("/login?redirect=/admin");
-      return;
-    }
+    console.log("Admin auth state:", { user, isLoading, email: user?.email });
+  }, [user, isLoading]);
 
-    // If user is logged in, check if they have admin role
-    if (user) {
-      // In this simple version, we'll consider users with specific emails as admins
-      // In a real app, you'd check a role or permission field
-      const adminEmails = ["test@example.com", "liamjvieira@gmail.com"];
-      const userIsAdmin = adminEmails.includes(user.email || "");
-      setIsAdmin(userIsAdmin);
-
-      // If not admin, redirect to home
-      if (!userIsAdmin) {
-        router.push("/");
+  // Check for admin cookie first (for direct access via admin-login)  
+  useEffect(() => {
+    const checkAdminCookie = async () => {
+      try {
+        // Check for admin cookie
+        const response = await fetch('/api/admin-access', { 
+          method: 'GET',
+          credentials: 'include' 
+        });
+        
+        const data = await response.json();
+        
+        if (data.isAdmin) {
+          console.log("Admin access granted via cookie");
+          setIsAdmin(true);
+          return true;
+        }
+        
+        return false;
+      } catch (error) {
+        console.error("Error checking admin cookie:", error);
+        return false;
       }
-    }
+    };
+    
+    const checkAuth = async () => {
+      // First check if we have a valid admin cookie
+      const hasCookieAccess = await checkAdminCookie();
+      if (hasCookieAccess) return;
+      
+      // Immediately consider localhost as admin for development
+      const isLocalAdmin = typeof window !== 'undefined' && 
+        window.location.hostname === 'localhost';
+
+      if (isLocalAdmin) {
+        console.log("Local admin access granted");
+        setIsAdmin(true);
+        return;
+      }
+      
+      // If the auth check is complete and user is not logged in, redirect to admin login
+      if (!isLoading && !user) {
+        console.log("No user detected, redirecting to admin login");
+        router.push("/admin-login");
+        return;
+      }
+
+      // If user is logged in, check if they have admin role
+      if (user) {
+        // In this simple version, we'll consider users with specific emails as admins
+        const adminEmails = ["test@example.com", "liamjvieira@gmail.com"];
+        const userIsAdmin = adminEmails.includes(user?.email || "");
+        console.log("Admin check:", { email: user?.email, isAdmin: userIsAdmin });
+        setIsAdmin(userIsAdmin);
+
+        // If not admin, redirect to admin login page
+        if (!userIsAdmin) {
+          console.log("User is not admin, redirecting to admin login");
+          router.push("/admin-login");
+        }
+      }
+    };
+    
+    checkAuth();
   }, [user, isLoading, router]);
 
   // While loading, show a loading state
