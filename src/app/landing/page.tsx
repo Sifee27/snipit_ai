@@ -39,8 +39,10 @@ export default function LandingPage() {
     setIsSubmitting(true);
 
     try {
+      console.log('Submitting email to waitlist:', email);
+      
       // Make an API call to save the email
-      const response = await fetch('/waitlist/api', {
+      const response = await fetch('/api/waitlist', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,20 +50,43 @@ export default function LandingPage() {
         body: JSON.stringify({ email }),
       });
       
-      if (!response.ok) {
-        throw new Error('Failed to join waitlist');
+      // For debugging
+      console.log('API Response status:', response.status);
+      
+      let data;
+      try {
+        data = await response.json();
+        console.log('API Response data:', data);
+      } catch (jsonError) {
+        console.error('Error parsing API response:', jsonError);
+        throw new Error('Invalid response from server');
       }
       
-      // Also store the email in local storage for demo purposes
-      localStorage.setItem('waitlist_email', email);
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to join waitlist');
+      }
       
-      console.log('Waitlist signup:', email);
+      // Also store the email in local storage for confirmation purposes
+      try {
+        localStorage.setItem('waitlist_email', email);
+      } catch (storageError) {
+        console.warn('Could not save to localStorage:', storageError);
+        // Continue anyway - this is just a nice-to-have
+      }
+      
+      console.log('Waitlist signup successful:', email);
       
       setIsSubmitted(true);
       setEmail('');
     } catch (err) {
       console.error('Error submitting form:', err);
-      setError('Something went wrong. Please try again.');
+      
+      // Provide more specific error message if available
+      if (err instanceof Error) {
+        setError(err.message || 'Something went wrong. Please try again.');
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -158,8 +183,29 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">You're on the list!</h3>
               <p className="text-gray-300 mb-4">
-                Thank you for joining our waitlist. We'll be in touch when Snipit is ready.
+                Thank you for joining our waitlist. We'll keep you updated on our progress and let you know when Snipit is ready for early access.
               </p>
+              <div className="flex flex-col space-y-3 mb-4">
+                <p className="text-sm text-gray-300">
+                  <span className="font-semibold">Next steps:</span> Keep an eye on your inbox for updates and exclusive previews.
+                </p>
+                <div className="flex justify-center space-x-4">
+                  <a 
+                    href="https://twitter.com/snipit_ai" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-400 hover:text-blue-300 flex items-center"
+                  >
+                    <Twitter className="h-4 w-4 mr-1" /> Follow us
+                  </a>
+                  <a 
+                    href="mailto:contact@snipit.cloud" 
+                    className="text-sm text-purple-400 hover:text-purple-300 flex items-center"
+                  >
+                    <Mail className="h-4 w-4 mr-1" /> Contact us
+                  </a>
+                </div>
+              </div>
               <button 
                 onClick={() => setIsSubmitted(false)}
                 className="text-sm text-gray-400 hover:text-white"
