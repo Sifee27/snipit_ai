@@ -13,6 +13,9 @@ export interface User {
   name: string;
   email: string;
   plan: 'free' | 'pro';
+  createdAt?: string;
+  usageCount?: number;
+  maxUsage?: number;
 }
 
 /**

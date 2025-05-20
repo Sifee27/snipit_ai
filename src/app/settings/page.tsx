@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,17 +9,51 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { UserCircle, Mail, CreditCard, Bell, Key, RefreshCw } from "lucide-react";
-
-// Mock user data
-const mockUser = {
-  name: "John Smith",
-  email: "john.smith@example.com",
-  plan: "free", // "free" or "pro"
-  memberSince: "2025-03-15T10:30:00"
-};
+import { useAuth } from "@/components/auth/auth-provider";
 
 export default function SettingsPage() {
-  const [user, setUser] = useState(mockUser);
+  // Get actual user data from auth context
+  const { user: authUser, isLoading, isAuthenticated } = useAuth();
+  const router = useRouter();
+  
+  // Initialize with actual user data or empty defaults
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    plan: "free",
+    memberSince: new Date().toISOString()
+  });
+  
+  // Redirect to login page if not authenticated
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isLoading, isAuthenticated, router]);
+  
+  // Update user state when auth data changes
+  useEffect(() => {
+    if (authUser) {
+      setUser({
+        name: authUser.name || "",
+        email: authUser.email || "",
+        plan: authUser.plan || "free",
+        memberSince: authUser.createdAt || new Date().toISOString()
+      });
+    }
+  }, [authUser]);
+  
+  // Show loading state while auth status is being determined
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center gap-2">
+          <div className="h-8 w-8 border-2 border-t-transparent border-primary rounded-full animate-spin"></div>
+          <p className="text-muted-foreground">Loading user profile...</p>
+        </div>
+      </div>
+    );
+  }
   const [isSaving, setIsSaving] = useState(false);
   
   const formatDate = (dateString: string) => {

@@ -316,21 +316,13 @@ const auth: AuthApi = {
   
   async getCurrentUser() {
     try {
+      // Disable fallback data to prevent auto-login with demo user
       return await fetchAPI('/auth/me', {
-        enableFallback: true,
-        fallbackData: { 
-          // Sample user data when auth API is not available
-          id: 'user_123',
-          email: 'demo@example.com',
-          name: 'Demo User',
-          plan: 'free',
-          usageCount: 5,
-          maxUsage: 10,
-          createdAt: new Date().toISOString()
-        }
+        enableFallback: false
       });
     } catch (error) {
       console.error('Failed to get current user:', error);
+      // Explicitly return null to ensure user is not logged in when API fails
       return null;
     }
   }
