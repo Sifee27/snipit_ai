@@ -6,6 +6,7 @@ import path from 'path';
 // Use a storage method that works in both development and production
 const DATA_DIR = path.join(process.cwd(), 'data');
 const WAITLIST_FILE = path.join(DATA_DIR, 'waitlist.json');
+const WAITLIST_TXT_FILE = path.join(DATA_DIR, 'waitlist_emails.txt');
 
 // In-memory storage as fallback
 let MEMORY_STORAGE: { emails: string[], lastUpdated: string } = {
@@ -61,6 +62,24 @@ function addToWaitlist(email: string): { success: boolean; message: string } {
       
       // Save updated data
       fs.writeFileSync(WAITLIST_FILE, JSON.stringify(data, null, 2));
+      
+      // Also append to plaintext file for easy access
+      try {
+        // Create text file if it doesn't exist
+        if (!fs.existsSync(WAITLIST_TXT_FILE)) {
+          fs.writeFileSync(WAITLIST_TXT_FILE, "SNIPIT WAITLIST EMAILS\n======================\n\n");
+        }
+        
+        // Append the new email with timestamp
+        fs.appendFileSync(
+          WAITLIST_TXT_FILE, 
+          `${email} (added: ${new Date().toISOString()})\n`
+        );
+        
+        console.log(`Email ${email} also saved to text file backup`);
+      } catch (txtError) {
+        console.warn('Could not save to text file backup:', txtError);
+      }
       
       console.log(`Email ${email} successfully added to file storage`);
       return { success: true, message: 'Email added to waitlist' };
