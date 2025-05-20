@@ -1,110 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import getWaitlistStorage from '@/lib/storage/waitlist-storage';
 
-// Directory to store waitlist data
-// Use a storage method that works in both development and production
-const DATA_DIR = path.join(process.cwd(), 'data');
-const WAITLIST_FILE = path.join(DATA_DIR, 'waitlist.json');
-const WAITLIST_TXT_FILE = path.join(DATA_DIR, 'waitlist_emails.txt');
-
-// In-memory storage as fallback
-let MEMORY_STORAGE: { emails: string[], lastUpdated: string } = {
-  emails: [],
-  lastUpdated: new Date().toISOString()
-};
+// Get storage provider
+const waitlistStorage = getWaitlistStorage();
 
 // Email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-// Initialize the data directory and waitlist file if they don't exist
-function initializeStorage() {
-  try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    
-    if (!fs.existsSync(WAITLIST_FILE)) {
-      fs.writeFileSync(WAITLIST_FILE, JSON.stringify({ 
-        emails: [],
-        lastUpdated: new Date().toISOString()
-      }));
-    }
-    
-    return true;
-  } catch (error) {
-    console.error('Error initializing storage:', error);
-    return false;
-  }
-}
-
-// Add an email to the waitlist
-function addToWaitlist(email: string): { success: boolean; message: string } {
-  try {
-    // Try file storage first
-    try {
-      // Initialize storage
-      if (!initializeStorage()) {
-        throw new Error('Storage initialization failed');
-      }
-      
-      // Read current data
-      const data = JSON.parse(fs.readFileSync(WAITLIST_FILE, 'utf8'));
-      
-      // Check if email already exists
-      if (data.emails.includes(email)) {
-        return { success: false, message: 'Email already registered' };
-      }
-      
-      // Add new email
-      data.emails.push(email);
-      data.lastUpdated = new Date().toISOString();
-      
-      // Save updated data
-      fs.writeFileSync(WAITLIST_FILE, JSON.stringify(data, null, 2));
-      
-      // Also append to plaintext file for easy access
-      try {
-        // Create text file if it doesn't exist
-        if (!fs.existsSync(WAITLIST_TXT_FILE)) {
-          fs.writeFileSync(WAITLIST_TXT_FILE, "SNIPIT WAITLIST EMAILS\n======================\n\n");
-        }
-        
-        // Append the new email with timestamp
-        fs.appendFileSync(
-          WAITLIST_TXT_FILE, 
-          `${email} (added: ${new Date().toISOString()})\n`
-        );
-        
-        console.log(`Email ${email} also saved to text file backup`);
-      } catch (txtError) {
-        console.warn('Could not save to text file backup:', txtError);
-      }
-      
-      console.log(`Email ${email} successfully added to file storage`);
-      return { success: true, message: 'Email added to waitlist' };
-      
-    } catch (fileError) {
-      // If file storage fails, use in-memory storage
-      console.warn('File storage failed, using in-memory fallback:', fileError);
-      
-      // Check if email already exists in memory storage
-      if (MEMORY_STORAGE.emails.includes(email)) {
-        return { success: false, message: 'Email already registered' };
-      }
-      
-      // Add to memory storage
-      MEMORY_STORAGE.emails.push(email);
-      MEMORY_STORAGE.lastUpdated = new Date().toISOString();
-      
-      console.log(`Email ${email} added to memory storage (fallback)`);
-      return { success: true, message: 'Email added to waitlist (memory storage)' };
-    }
-  } catch (error) {
-    console.error('Critical error adding to waitlist:', error);
-    return { success: false, message: 'Server error occurred' };
-  }
-}
 
 // Handle POST requests to add emails
 export async function POST(req: NextRequest) {
@@ -138,10 +39,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'Invalid email format' }, { status: 400 });
     }
     
-    // Simple in-memory fallback if file operations fail
     try {
-      // Attempt to add to waitlist file
-      const result = addToWaitlist(email);
+      // Use our robust storage implementation
+      const result = await waitlistStorage.addEmail(email);
       
       if (result.success) {
         console.log('Email successfully added to waitlist:', email);
@@ -152,13 +52,11 @@ export async function POST(req: NextRequest) {
       }
     } catch (storageError) {
       console.error('Error with waitlist storage:', storageError);
-      // Even if file storage fails, acknowledge the submission
-      console.log('Using memory fallback for email:', email);
       return NextResponse.json({ 
-        success: true, 
-        message: 'Email received (fallback mode)',
-        detail: 'Using memory storage fallback'
-      }, { status: 200 });
+        success: false, 
+        message: 'Server error: Unable to save email. Please try again later.',
+        detail: storageError instanceof Error ? storageError.message : 'Unknown storage error'
+      }, { status: 500 });
     }
   } catch (error) {
     console.error('Critical error processing waitlist request:', error);
@@ -191,17 +89,15 @@ export async function GET(req: NextRequest) {
   }
   
   try {
-    if (!fs.existsSync(WAITLIST_FILE)) {
-      return NextResponse.json({ success: true, count: 0, emails: [] }, { status: 200 });
-    }
-    
-    const data = JSON.parse(fs.readFileSync(WAITLIST_FILE, 'utf8'));
+    // Get emails using storage provider
+    const emails = await waitlistStorage.getEmails();
+    const count = await waitlistStorage.getTotalCount();
     
     return NextResponse.json({
       success: true,
-      count: data.emails.length,
-      lastUpdated: data.lastUpdated,
-      emails: data.emails
+      count: count,
+      lastUpdated: new Date().toISOString(),
+      emails: emails
     }, { status: 200 });
   } catch (error) {
     console.error('Error retrieving waitlist data:', error);
