@@ -22,20 +22,51 @@ export default function LandingPage() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
       setTheme(savedTheme);
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+      if (savedTheme === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', prefersDark);
+      } else {
+        document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+      }
     } else {
       // Use system preference
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
+      setTheme('system');
       document.documentElement.classList.toggle('dark', prefersDark);
     }
   }, []);
   
-  // Toggle theme function
+  // Listen for system theme changes when using system theme
+  useEffect(() => {
+    if (theme !== 'system') return;
+    
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      document.documentElement.classList.toggle('dark', e.matches);
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [theme]);
+  
+  // Toggle theme function with system preference support
   const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    let newTheme;
+    // Cycle through: light -> dark -> system
+    if (theme === 'light') {
+      newTheme = 'dark';
+      document.documentElement.classList.add('dark');
+    } else if (theme === 'dark') {
+      newTheme = 'system';
+      // Check system preference
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.toggle('dark', prefersDark);
+    } else {
+      newTheme = 'light';
+      document.documentElement.classList.remove('dark');
+    }
+    
     setTheme(newTheme);
-    document.documentElement.classList.toggle('dark');
     localStorage.setItem('theme', newTheme);
   };
 
@@ -165,12 +196,19 @@ export default function LandingPage() {
             <button
               onClick={toggleTheme}
               className="ml-3 p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
-              aria-label="Toggle dark mode"
+              aria-label="Toggle theme mode"
+              title={`Current theme: ${theme}. Click to switch.`}
             >
               {theme === 'dark' ? (
                 <Sun className="h-5 w-5" />
-              ) : (
+              ) : theme === 'light' ? (
                 <Moon className="h-5 w-5" />
+              ) : (
+                <div className="h-5 w-5 flex items-center justify-center">
+                  <div className="h-4 w-4 rounded-full bg-gradient-to-r from-gray-400 via-gray-600 to-gray-400 flex items-center justify-center overflow-hidden">
+                    <div className="h-2 w-2 bg-white rounded-full transform translate-x-[2px] translate-y-[-2px]"></div>
+                  </div>
+                </div>
               )}
             </button>
           </nav>
@@ -178,12 +216,19 @@ export default function LandingPage() {
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all md:hidden"
-              aria-label="Toggle dark mode"
+              aria-label="Toggle theme mode"
+              title={`Current theme: ${theme}. Click to switch.`}
             >
               {theme === 'dark' ? (
                 <Sun className="h-5 w-5" />
-              ) : (
+              ) : theme === 'light' ? (
                 <Moon className="h-5 w-5" />
+              ) : (
+                <div className="h-5 w-5 flex items-center justify-center">
+                  <div className="h-4 w-4 rounded-full bg-gradient-to-r from-gray-400 via-gray-600 to-gray-400 flex items-center justify-center overflow-hidden">
+                    <div className="h-2 w-2 bg-white rounded-full transform translate-x-[2px] translate-y-[-2px]"></div>
+                  </div>
+                </div>
               )}
             </button>
             <button className="md:hidden text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white p-2">
