@@ -563,77 +563,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="relative border-t border-gray-200/50 dark:border-gray-800/50 overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute -top-40 right-10 w-96 h-96 rounded-full bg-blue-600/5 blur-3xl pointer-events-none" aria-hidden="true"></div>
-        
-        <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-y-12 md:gap-x-8 lg:gap-x-12">
-            <div className="md:col-span-5 lg:col-span-4">
-              <div className="flex items-center mb-6">
-                <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-600">
-                  Snipit
-                </h3>
-              </div>
-              
-              <p className="text-gray-600 dark:text-gray-400 max-w-md mb-6">
-                Transform hours of content into minutes of focused learning with our AI-powered summarization technology.
-              </p>
-              
-              <div className="flex items-center space-x-4">
-                <a href="#" className="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors">
-                  <Twitter className="h-5 w-5" />
-                </a>
-                <a href="mailto:info@snipit.ai" className="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors">
-                  <Mail className="h-5 w-5" />
-                </a>
-              </div>
-            </div>
-            
-            <div className="md:col-span-7 lg:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-8">
-              <div>
-                <h4 className="text-gray-900 dark:text-white font-medium mb-4">Product</h4>
-                <ul className="space-y-3">
-                  <li><a href="#features" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-sm transition-colors">Features</a></li>
-                  <li><a href="#waitlist" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-sm transition-colors">Join Waitlist</a></li>
-                  <li><a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-sm transition-colors">Pricing</a></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="text-gray-900 dark:text-white font-medium mb-4">Company</h4>
-                <ul className="space-y-3">
-                  <li><a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-sm transition-colors">About</a></li>
-                  <li><a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-sm transition-colors">Blog</a></li>
-                  <li><a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-sm transition-colors">Careers</a></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="text-gray-900 dark:text-white font-medium mb-4">Legal</h4>
-                <ul className="space-y-3">
-                  <li><a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-sm transition-colors">Privacy</a></li>
-                  <li><a href="#" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-sm transition-colors">Terms</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          
-          <div className="mt-12 pt-8 border-t border-gray-200/50 dark:border-gray-800/50 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-500 dark:text-gray-500 mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} Snipit. All rights reserved.
-            </p>
-            
-            <div className="flex items-center space-x-4">
-              <span className="text-xs text-gray-500 dark:text-gray-500">Crafted with care</span>
-              <div className="flex -space-x-1">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center ring-2 ring-gray-100 dark:ring-gray-900 text-white text-xs font-bold">S</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* Footer is now managed in the layout.tsx file */}
     </div>
   );
 }
