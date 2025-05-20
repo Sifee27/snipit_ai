@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowDown, ArrowRight, Twitter, Mail, Check } from 'lucide-react';
+import { ArrowDown, ArrowRight, Twitter, Mail, Check, Headphones, Video, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function LandingPage() {
@@ -120,11 +120,15 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="flex-1 container mx-auto px-4 py-16 md:py-24 flex flex-col items-center justify-center text-center">
         <h1 className="text-4xl md:text-6xl font-bold max-w-4xl leading-tight mb-6">
-          Snipit is an <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">AI-powered summarizer</span> for podcasts, videos, and articles.
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">Save 80% of your time</span> while capturing all essential knowledge
         </h1>
         
-        <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-10">
-          Perfect for creators & students who want the gold without the grind.
+        <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-6">
+          Snipit transforms hours of content into minutes of focused learning with AI-powered summaries of podcasts, videos, and articles.
+        </p>
+        
+        <p className="text-lg text-gray-400 max-w-2xl mb-10">
+          Never miss key insights or waste time on fluff content again. Perfect for researchers, students, professionals, and lifelong learners.
         </p>
         
         <button
@@ -136,28 +140,60 @@ export default function LandingPage() {
         </button>
 
         {/* Feature cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 w-full max-w-5xl">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 w-full max-w-5xl">
           {[
             {
               title: 'Podcast Summaries',
-              description: 'Get key insights from hours of audio in minutes',
+              description: 'Transform 2-hour podcast episodes into 5-minute reads',
+              benefits: [
+                'Key insights and takeaways highlighted',
+                'Timestamps for important moments',
+                'Searchable transcripts with context'
+              ],
+              icon: 'Headphones',
               gradient: 'from-pink-500 to-orange-500'
             },
             {
               title: 'Video Highlights',
-              description: 'Extract the most important points from any video',
+              description: 'Watch a 30-second summary instead of a 20-minute video',
+              benefits: [
+                'Auto-generated chapter markers',
+                'Visual key point extraction',
+                'Citation links to original content'
+              ],
+              icon: 'Video',
               gradient: 'from-blue-500 to-teal-500'
             },
             {
               title: 'Article Extracts',
-              description: 'Focus on what matters in lengthy articles',
+              description: 'Distill 5,000-word articles into 500-word essentials',
+              benefits: [
+                'Bullet-point summaries for quick scanning',
+                'Source verification and fact-checking',
+                'Related content recommendations'
+              ],
+              icon: 'FileText',
               gradient: 'from-purple-500 to-indigo-500'
             }
           ].map((feature, i) => (
-            <div key={i} className="bg-gray-800 bg-opacity-50 backdrop-blur-sm p-6 rounded-2xl border border-gray-700 hover:border-gray-500 transition-all">
-              <div className={`h-2 w-16 mb-4 rounded-full bg-gradient-to-r ${feature.gradient}`}></div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-400">{feature.description}</p>
+            <div key={i} className="bg-gray-800 bg-opacity-50 backdrop-blur-sm p-6 rounded-2xl border border-gray-700 hover:border-gray-500 transition-all hover:transform hover:scale-[1.02] hover:shadow-lg">
+              <div className="flex items-center mb-4">
+                <div className={`h-10 w-10 rounded-xl flex items-center justify-center bg-gradient-to-r ${feature.gradient} mr-3`}>
+                  {feature.icon === 'Headphones' && <Headphones className="h-5 w-5" />}
+                  {feature.icon === 'Video' && <Video className="h-5 w-5" />}
+                  {feature.icon === 'FileText' && <FileText className="h-5 w-5" />}
+                </div>
+                <h3 className="text-xl font-semibold">{feature.title}</h3>
+              </div>
+              <p className="text-gray-300 mb-4 font-medium">{feature.description}</p>
+              <ul className="space-y-2">
+                {feature.benefits.map((benefit, index) => (
+                  <li key={index} className="flex items-start">
+                    <Check className="h-4 w-4 text-green-400 mr-2 mt-1 flex-shrink-0" />
+                    <span className="text-gray-400 text-sm">{benefit}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
