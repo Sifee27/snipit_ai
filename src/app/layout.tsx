@@ -5,6 +5,7 @@ import { Navbar } from '@/components/navigation/navbar';
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from '@/components/auth/auth-provider';
 import ClientLayout from '@/components/client-layout';
+import { Analytics } from "@vercel/analytics/react";
 
 // Load Inter with all weights for better typography control
 const inter = Inter({ 
@@ -77,6 +78,7 @@ export default function RootLayout({
             <Toaster richColors position="bottom-right" />
           </AuthProvider>
         </ClientLayout>
+        <Analytics />
       </body>
     </html>
   );
