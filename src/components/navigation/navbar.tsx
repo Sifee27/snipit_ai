@@ -22,6 +22,9 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { isAuthenticated, user, logout } = useAuth();
+  
+  // Check if user is an admin
+  const isAdmin = user && ['test@example.com', 'liamjvieira@gmail.com'].includes(user.email || '');
 
   const routes = [
     {
@@ -111,6 +114,14 @@ export function Navbar() {
                   <DropdownMenuContent align="end" className="w-52">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    {isAdmin && (
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin/waitlist" className="flex w-full cursor-pointer">
+                          <LayoutDashboard className="mr-2 h-4 w-4" />
+                          Admin Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
                     {authRoutes.map((route) => (
                       <DropdownMenuItem key={route.href} asChild>
                         <Link href={route.href} className="flex w-full cursor-pointer">
