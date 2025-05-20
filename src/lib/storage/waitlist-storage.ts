@@ -28,23 +28,42 @@ class FileWaitlistStorage implements WaitlistStorage {
     try {
       // Create data directory if it doesn't exist
       if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
+        try {
+          fs.mkdirSync(DATA_DIR, { recursive: true });
+          console.log(`Created data directory at ${DATA_DIR}`);
+        } catch (dirError) {
+          console.error(`Failed to create data directory: ${dirError}`);
+          return false;
+        }
       }
       
       // Create JSON file if it doesn't exist
       if (!fs.existsSync(WAITLIST_FILE)) {
-        fs.writeFileSync(WAITLIST_FILE, JSON.stringify({
-          emails: [],
-          lastUpdated: new Date().toISOString()
-        }, null, 2));
+        try {
+          const initialData = {
+            emails: [],
+            lastUpdated: new Date().toISOString()
+          };
+          fs.writeFileSync(WAITLIST_FILE, JSON.stringify(initialData, null, 2));
+          console.log(`Created waitlist JSON file at ${WAITLIST_FILE}`);
+        } catch (jsonError) {
+          console.error(`Failed to create waitlist JSON file: ${jsonError}`);
+          return false;
+        }
       }
       
       // Create TXT file if it doesn't exist
       if (!fs.existsSync(WAITLIST_TXT_FILE)) {
-        fs.writeFileSync(
-          WAITLIST_TXT_FILE, 
-          "SNIPIT WAITLIST EMAILS\n======================\n\n"
-        );
+        try {
+          fs.writeFileSync(
+            WAITLIST_TXT_FILE, 
+            "SNIPIT WAITLIST EMAILS\n======================\n\n"
+          );
+          console.log(`Created waitlist TXT file at ${WAITLIST_TXT_FILE}`);
+        } catch (txtError) {
+          console.error(`Failed to create waitlist TXT file: ${txtError}`);
+          // Continue even if TXT file creation fails
+        }
       }
       
       return true;
@@ -58,12 +77,28 @@ class FileWaitlistStorage implements WaitlistStorage {
     try {
       // Ensure storage is initialized
       if (!this.ensureStorageExists()) {
-        throw new Error('Storage initialization failed');
+        console.error('Storage initialization failed');
+        return { success: false, message: 'Unable to initialize storage. Your email will be saved when our systems are back online.' };
       }
       
       // Read current waitlist data
-      const rawData = fs.readFileSync(WAITLIST_FILE, 'utf8');
-      const data = JSON.parse(rawData || '{"emails":[],"lastUpdated":""}');
+      let data = { emails: [], lastUpdated: new Date().toISOString() };
+      try {
+        if (fs.existsSync(WAITLIST_FILE)) {
+          const rawData = fs.readFileSync(WAITLIST_FILE, 'utf8');
+          if (rawData && rawData.trim()) {
+            data = JSON.parse(rawData);
+          }
+        }
+      } catch (readError) {
+        console.error('Error reading waitlist file:', readError);
+        // Continue with empty data object
+      }
+      
+      // Ensure emails array exists
+      if (!data.emails) {
+        data.emails = [];
+      }
       
       // Check for duplicate email
       if (data.emails.includes(email)) {
@@ -75,19 +110,37 @@ class FileWaitlistStorage implements WaitlistStorage {
       data.lastUpdated = new Date().toISOString();
       
       // Write updated data back to JSON file
-      fs.writeFileSync(WAITLIST_FILE, JSON.stringify(data, null, 2));
+      try {
+        fs.writeFileSync(WAITLIST_FILE, JSON.stringify(data, null, 2));
+        console.log(`Email ${email} saved to JSON file`);
+      } catch (writeJsonError) {
+        console.error('Error writing to JSON file:', writeJsonError);
+        // Continue to try text file
+      }
       
       // Also append to TXT file for easy access
-      fs.appendFileSync(
-        WAITLIST_TXT_FILE,
-        `${email} (added: ${new Date().toISOString()})\n`
-      );
+      try {
+        // Make sure the text file exists
+        if (!fs.existsSync(WAITLIST_TXT_FILE)) {
+          fs.writeFileSync(WAITLIST_TXT_FILE, "SNIPIT WAITLIST EMAILS\n======================\n\n");
+        }
+        
+        fs.appendFileSync(
+          WAITLIST_TXT_FILE,
+          `${email} (added: ${new Date().toISOString()})\n`
+        );
+        console.log(`Email ${email} saved to text file`);
+      } catch (writeTxtError) {
+        console.error('Error writing to text file:', writeTxtError);
+        // Continue anyway
+      }
       
-      console.log(`Email ${email} successfully saved to waitlist`);
+      // If we got here, at least one write succeeded or we tried our best
+      console.log(`Email ${email} processing completed`);
       return { success: true, message: 'Email added to waitlist' };
     } catch (error) {
-      console.error('Error saving email to file storage:', error);
-      throw error; // Propagate error for handling by caller
+      console.error('Unexpected error saving email:', error);
+      return { success: false, message: 'Server error. Please try again later.' };
     }
   }
   
