@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowDown, ArrowRight, Twitter, Mail, Check, Headphones, Video, FileText } from 'lucide-react';
+import { ArrowDown, ArrowRight, Twitter, Mail, Check, Headphones, Video, FileText, Moon, Sun } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function LandingPage() {
@@ -93,7 +93,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-950 to-gray-900 text-white">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900 text-gray-900 dark:text-white">
       {/* Header */}
       <header className="container mx-auto px-4 py-6 flex justify-between items-center">
         <div className="flex items-center">
@@ -104,13 +104,13 @@ export default function LandingPage() {
         <div className="flex items-center space-x-3">
           <Link 
             href="/waitlist"
-            className="px-4 py-2 text-gray-300 hover:text-white rounded-full text-sm font-medium transition-all"
+            className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-full text-sm font-medium transition-all"
           >
             Waitlist Page
           </Link>
           <button
             onClick={scrollToForm}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-full text-sm font-medium transition-all"
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-full text-sm font-medium transition-all"
           >
             Join Waitlist
           </button>
@@ -120,20 +120,20 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="flex-1 container mx-auto px-4 py-16 md:py-24 flex flex-col items-center justify-center text-center">
         <h1 className="text-4xl md:text-6xl font-bold max-w-4xl leading-tight mb-6">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">Save 80% of your time</span> while capturing all essential knowledge
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">Save 80% of your time</span> while capturing all essential knowledge
         </h1>
         
-        <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mb-6">
+        <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-2xl mb-6">
           Snipit transforms hours of content into minutes of focused learning with AI-powered summaries of podcasts, videos, and articles.
         </p>
         
-        <p className="text-lg text-gray-400 max-w-2xl mb-10">
+        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mb-10">
           Never miss key insights or waste time on fluff content again. Perfect for researchers, students, professionals, and lifelong learners.
         </p>
         
         <button
           onClick={scrollToForm}
-          className="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-full text-lg font-medium transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
+          className="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full text-lg font-medium transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
         >
           Join the Waitlist
           <ArrowDown className="h-5 w-5 animate-bounce" />
@@ -176,21 +176,21 @@ export default function LandingPage() {
               gradient: 'from-purple-500 to-indigo-500'
             }
           ].map((feature, i) => (
-            <div key={i} className="bg-gray-800 bg-opacity-50 backdrop-blur-sm p-6 rounded-2xl border border-gray-700 hover:border-gray-500 transition-all hover:transform hover:scale-[1.02] hover:shadow-lg">
+            <div key={i} className="bg-white dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-50 backdrop-blur-sm p-6 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-all hover:transform hover:scale-[1.02] hover:shadow-lg">
               <div className="flex items-center mb-4">
                 <div className={`h-10 w-10 rounded-xl flex items-center justify-center bg-gradient-to-r ${feature.gradient} mr-3`}>
-                  {feature.icon === 'Headphones' && <Headphones className="h-5 w-5" />}
-                  {feature.icon === 'Video' && <Video className="h-5 w-5" />}
-                  {feature.icon === 'FileText' && <FileText className="h-5 w-5" />}
+                  {feature.icon === 'Headphones' && <Headphones className="h-5 w-5 text-white" />}
+                  {feature.icon === 'Video' && <Video className="h-5 w-5 text-white" />}
+                  {feature.icon === 'FileText' && <FileText className="h-5 w-5 text-white" />}
                 </div>
-                <h3 className="text-xl font-semibold">{feature.title}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{feature.title}</h3>
               </div>
-              <p className="text-gray-300 mb-4 font-medium">{feature.description}</p>
+              <p className="text-gray-800 dark:text-gray-300 mb-4 font-medium">{feature.description}</p>
               <ul className="space-y-2">
                 {feature.benefits.map((benefit, index) => (
                   <li key={index} className="flex items-start">
-                    <Check className="h-4 w-4 text-green-400 mr-2 mt-1 flex-shrink-0" />
-                    <span className="text-gray-400 text-sm">{benefit}</span>
+                    <Check className="h-4 w-4 text-green-600 dark:text-green-400 mr-2 mt-1 flex-shrink-0" />
+                    <span className="text-gray-600 dark:text-gray-400 text-sm">{benefit}</span>
                   </li>
                 ))}
               </ul>
@@ -204,25 +204,25 @@ export default function LandingPage() {
         ref={formRef}
         className="container mx-auto px-4 py-16 md:py-24"
       >
-        <div className="max-w-2xl mx-auto bg-gray-800 bg-opacity-50 backdrop-blur-sm p-8 md:p-12 rounded-3xl border border-gray-700">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
+        <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-50 backdrop-blur-sm p-8 md:p-12 rounded-3xl border border-gray-200 dark:border-gray-700 shadow-lg">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center text-gray-900 dark:text-white">
             Get Early Access
           </h2>
-          <p className="text-gray-300 text-center mb-8">
+          <p className="text-gray-600 dark:text-gray-300 text-center mb-8">
             Join our waitlist to be among the first to experience Snipit when we launch.
           </p>
 
           {isSubmitted ? (
-            <div className="bg-green-900 bg-opacity-30 border border-green-700 rounded-xl p-6 text-center">
+            <div className="bg-green-100 dark:bg-green-900 bg-opacity-50 dark:bg-opacity-30 border border-green-300 dark:border-green-700 rounded-xl p-6 text-center">
               <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Check className="w-8 h-8" />
+                <Check className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">You're on the list!</h3>
-              <p className="text-gray-300 mb-4">
+              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">You're on the list!</h3>
+              <p className="text-gray-700 dark:text-gray-300 mb-4">
                 Thank you for joining our waitlist. We'll keep you updated on our progress and let you know when Snipit is ready for early access.
               </p>
               <div className="flex flex-col space-y-3 mb-4">
-                <p className="text-sm text-gray-300">
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                   <span className="font-semibold">Next steps:</span> Keep an eye on your inbox for updates and exclusive previews.
                 </p>
                 <div className="flex justify-center space-x-4">
@@ -230,29 +230,29 @@ export default function LandingPage() {
                     href="https://twitter.com/snipit_ai" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-sm text-blue-400 hover:text-blue-300 flex items-center"
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center"
                   >
                     <Twitter className="h-4 w-4 mr-1" /> Follow us
                   </a>
                   <a 
-                    href="mailto:contact@snipit.cloud" 
-                    className="text-sm text-purple-400 hover:text-purple-300 flex items-center"
+                    href="mailto:hello@snipit.ai"
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center"
                   >
                     <Mail className="h-4 w-4 mr-1" /> Contact us
                   </a>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => setIsSubmitted(false)}
-                className="text-sm text-gray-400 hover:text-white"
+                className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 inline-flex items-center gap-1"
               >
-                Sign up with another email
+                <ArrowRight className="h-3 w-3" /> Submit another email
               </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Email address
                 </label>
                 <input
@@ -262,8 +262,8 @@ export default function LandingPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   className={cn(
-                    "w-full px-4 py-3 bg-gray-900 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition-colors",
-                    error ? "border-red-500" : "border-gray-700 hover:border-gray-500"
+                    "w-full px-4 py-3 bg-white dark:bg-gray-900 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition-colors",
+                    error ? "border-red-500" : "border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500"
                   )}
                   disabled={isSubmitting}
                 />
@@ -289,34 +289,31 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="container mx-auto px-4 py-8 md:py-12 border-t border-gray-800">
+      <footer className="container mx-auto px-4 py-8 md:py-12 border-t border-gray-200 dark:border-gray-800">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 mb-4 md:mb-0">
+          <p className="text-gray-600 dark:text-gray-400 mb-4 md:mb-0">
             Snipit is in development. Stay tuned!
           </p>
           <div className="flex items-center space-x-6">
             <Link 
               href="https://twitter.com/snipit_ai" 
               target="_blank"
-              className="text-gray-400 hover:text-blue-400 transition-colors"
-              aria-label="Twitter"
+              className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               <Twitter className="h-5 w-5" />
-              <span className="sr-only">Twitter</span>
             </Link>
-            <Link 
-              href="mailto:contact@snipit.cloud"
-              className="text-gray-400 hover:text-purple-400 transition-colors"
-              aria-label="Email"
+            <button 
+              onClick={() => document.documentElement.classList.toggle('dark')}
+              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Toggle dark mode"
             >
-              <Mail className="h-5 w-5" />
-              <span className="sr-only">Email</span>
-            </Link>
+              <Sun className="h-5 w-5 hidden dark:block" />
+              <Moon className="h-5 w-5 block dark:hidden" />
+              <span className="sr-only">Toggle theme</span>
+            </button>
           </div>
         </div>
-        <div className="text-center text-gray-500 text-sm mt-8">
-          &copy; {new Date().getFullYear()} Snipit. All rights reserved.
-        </div>
+        {/* Footer content is already in the main layout */}
       </footer>
     </div>
   );
