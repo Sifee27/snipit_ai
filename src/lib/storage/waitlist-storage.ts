@@ -19,7 +19,28 @@ interface WaitlistData {
 }
 
 // Directory to store waitlist data
-const DATA_DIR = path.join(process.cwd(), 'data');
+// This is a critical section - we need to ensure these paths work in all environments
+
+// In production, some hosting providers have read-only filesystems except for specific directories like /tmp
+// Check for environment-specific storage paths
+const getStoragePath = () => {
+  // Check for environment variables defining storage locations
+  if (process.env.WAITLIST_DATA_DIR) {
+    return process.env.WAITLIST_DATA_DIR;
+  }
+  
+  // Check if we're in a Vercel environment (or other serverless environment)
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    // Use /tmp for serverless environments with ephemeral filesystems
+    // Note: this data will be lost on deployment, but works for temporary storage
+    return path.join('/tmp');
+  }
+  
+  // Default storage location - project root /data directory
+  return path.join(process.cwd(), 'data');
+};
+
+const DATA_DIR = getStoragePath();
 const WAITLIST_FILE = path.join(DATA_DIR, 'waitlist.json');
 const WAITLIST_TXT_FILE = path.join(DATA_DIR, 'waitlist_emails.txt');
 
@@ -33,6 +54,19 @@ export interface WaitlistStorage {
 // Base storage implementation
 class FileWaitlistStorage implements WaitlistStorage {
   private ensureStorageExists(): boolean {
+    // Create a detailed report of the environment to help with debugging
+    const storageDebugInfo = {
+      dataDir: DATA_DIR,
+      waitlistFile: WAITLIST_FILE,
+      processCwd: process.cwd(),
+      nodeEnv: process.env.NODE_ENV,
+      platform: process.platform,
+      isVercel: !!process.env.VERCEL,
+      isAws: !!process.env.AWS_LAMBDA_FUNCTION_NAME,
+      timestamp: new Date().toISOString()
+    };
+    
+    console.log(`[Storage] STORAGE DEBUG INFO: ${JSON.stringify(storageDebugInfo)}`);
     const timestamp = new Date().toISOString();
     console.log(`[Storage ${timestamp}] Ensuring storage directory and files exist...`);
     console.log(`[Storage ${timestamp}] DATA_DIR: ${DATA_DIR}`);
@@ -350,19 +384,28 @@ class RemoteBackupStorage implements WaitlistStorage {
 }
 
 // Get the appropriate storage instance based on environment
-export function getWaitlistStorage(): WaitlistStorage {
-  console.log('[StorageFactory] getWaitlistStorage called.');
-  // If remote API is configured, use the combined approach
-  const apiEndpoint = process.env.WAITLIST_BACKUP_API;
-  const apiKey = process.env.WAITLIST_BACKUP_KEY;
-  
-  if (apiEndpoint && apiKey) {
-    console.log('[StorageFactory] Using RemoteBackupStorage.');
-    return new RemoteBackupStorage(apiEndpoint, apiKey);
+function getWaitlistStorage(): WaitlistStorage {
+  // Special handling for production environments
+  if (process.env.NODE_ENV === 'production') {
+    console.log('[Storage] Running in production environment');
+    
+    // Check if we should use remote backup
+    const apiEndpoint = process.env.WAITLIST_BACKUP_API;
+    const apiKey = process.env.WAITLIST_BACKUP_KEY;
+    
+    if (apiEndpoint && apiKey) {
+      console.log('[Storage] Using remote backup storage with API endpoint');
+      return new RemoteBackupStorage(apiEndpoint, apiKey);
+    }
+    
+    // Use database if available (not implemented yet)
+    // if (process.env.DATABASE_URL) {
+    //   return new DatabaseWaitlistStorage(process.env.DATABASE_URL);
+    // }
   }
   
-  // Otherwise use file storage
-  console.log('[StorageFactory] Using FileWaitlistStorage.');
+  // Default to file storage for development
+  console.log('[Storage] Using local file storage');
   return new FileWaitlistStorage();
 }
 
