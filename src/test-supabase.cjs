@@ -31,7 +31,7 @@ async function testConnection() {
   }
 }
 
-async function addEmail(email: string) {
+async function addEmail(email) {
   console.log(`\nAttempting to add email: ${email}`);
   
   try {
@@ -94,7 +94,7 @@ async function getEmails() {
       return [];
     }
     
-    const emails = data.map((entry: { email: string }) => entry.email);
+    const emails = data.map(entry => entry.email);
     console.log(`✅ Retrieved ${emails.length} emails successfully`);
     return emails;
   } catch (err) {
@@ -127,7 +127,7 @@ async function runTests() {
   
   if (emails.length > 0) {
     console.log('First 5 emails:');
-    emails.slice(0, 5).forEach((email: string, index: number) => {
+    emails.slice(0, 5).forEach((email, index) => {
       console.log(`  ${index + 1}. ${email}${email === TEST_EMAIL ? ' ✅' : ''}`);
     });
     

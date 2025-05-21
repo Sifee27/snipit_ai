@@ -162,7 +162,7 @@ export class WaitlistService {
   }
   
   /**
-   * Save email to Supabase
+   * Save email to Supabase with schema detection and graceful fallbacks
    */
   private async saveEmailToSupabase(entry: WaitlistEntry): Promise<WaitlistResponse> {
     // Check if email already exists
@@ -188,15 +188,54 @@ export class WaitlistService {
       };
     }
     
-    // Insert new email
+    // First, try to detect table schema by checking if columns exist
+    try {
+      // Try a small insert with just the email to determine what columns exist
+      const insertData: any = { email: entry.email };
+      
+      // Try to add full data first
+      const { error: fullInsertError } = await supabase
+        .from(this.tableName)
+        .insert([{
+          email: entry.email,
+          source: entry.source,
+          metadata: entry.metadata
+        }])
+        .select();
+        
+      // If there's an error about missing columns, try a simpler approach
+      if (fullInsertError) {
+        logDatabaseOperation('Full insert failed, trying minimal insert', { error: fullInsertError });
+        
+        // Try insert with just email (should work with any schema)
+        const { data: minimalData, error: minimalError } = await supabase
+          .from(this.tableName)
+          .insert([{ email: entry.email }])
+          .select();
+          
+        if (minimalError) {
+          logDatabaseOperation('Even minimal insert failed', { error: minimalError });
+          throw new Error(`Database insert error: ${minimalError.message}`);
+        }
+        
+        return {
+          success: true,
+          message: 'Email added to waitlist with minimal data',
+          data: minimalData,
+          source: 'supabase-minimal'
+        };
+      }
+    } catch (schemaError) {
+      logDatabaseOperation('Schema detection error', { error: schemaError });
+      throw schemaError;
+    }
+    
+    // If we get here, the full insert succeeded
     const { data, error } = await supabase
       .from(this.tableName)
-      .insert([{
-        email: entry.email,
-        source: entry.source,
-        metadata: entry.metadata
-      }])
-      .select();
+      .select('id, email')
+      .eq('email', entry.email)
+      .limit(1);
       
     if (error) {
       logDatabaseOperation('Error adding email', { error, email: entry.email });
@@ -289,34 +328,134 @@ export class WaitlistService {
     return {
       success: true,
       message: 'Email added to waitlist (memory only)',
-      source: 'memory'
-    };
+      
+  // If we get here, the full insert succeeded
+  const { data, error } = await supabase
+    .from(this.tableName)
+    .select('id, email')
+    .eq('email', entry.email)
+    .limit(1);
+      
+  if (error) {
+    logDatabaseOperation('Error adding email', { error, email: entry.email });
+    throw new Error(`Insert error: ${error.message}`);
   }
-  
-  /**
-   * Get all waitlist emails
-   */
-  public async getEmails(): Promise<string[]> {
+      
+  logDatabaseOperation('Email added successfully', { email: entry.email });
+  return {
+    success: true,
+    message: 'Email added to waitlist',
+    data: data?.[0],
+    source: 'supabase'
+  };
+}
+
+/**
+ * Save email to file (fallback)
+ */
+private async saveEmailToFile(entry: WaitlistEntry): Promise<WaitlistResponse> {
+  // Ensure data directory exists
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+      
+  // Read existing data or create empty structure
+  let data = {
+    emails: [] as string[],
+    lastUpdated: new Date().toISOString()
+  };
+      
+  // Try to read existing file
+  if (fs.existsSync(WAITLIST_FILE)) {
     try {
-      // Try Supabase first
-      const { data, error } = await supabase
-        .from(this.tableName)
-        .select('email');
-      
-      if (!error && data && data.length > 0) {
-        return data.map(item => item.email);
+      const fileContent = fs.readFileSync(WAITLIST_FILE, 'utf8');
+      const parsedData = JSON.parse(fileContent);
+      if (parsedData && Array.isArray(parsedData.emails)) {
+        data.emails = parsedData.emails;
       }
-      
-      // Fallback to file
-      return this.getEmailsFromFile();
-    } catch (error) {
-      console.error('Error getting emails from database:', error);
-      return this.getEmailsFromFile();
+    } catch (readError) {
+      console.error('Error reading waitlist file:', readError);
+      // Continue with empty data
     }
   }
-  
-  /**
-   * Get emails from file
+      
+  // Check if email already exists
+  if (data.emails.includes(entry.email)) {
+    return {
+      success: true,
+      message: 'Email already in waitlist',
+      source: 'file-existing'
+    };
+  }
+      
+  // Add email and save file
+  data.emails.push(entry.email);
+  data.lastUpdated = new Date().toISOString();
+      
+  fs.writeFileSync(WAITLIST_FILE, JSON.stringify(data, null, 2));
+      
+  return {
+    success: true,
+    message: 'Email added to waitlist',
+    source: 'file'
+  };
+}
+
+/**
+ * Save email to memory (last resort)
+ */
+private saveEmailToMemory(entry: WaitlistEntry): WaitlistResponse {
+  // Define global storage if not exists
+  if (typeof global.waitlistEmails === 'undefined') {
+    global.waitlistEmails = [];
+  }
+      
+  // Check for duplicate
+  if (global.waitlistEmails.includes(entry.email)) {
+    return {
+      success: true,
+      message: 'Email already in waitlist',
+      source: 'memory-existing'
+    };
+  }
+      
+  // Add email to memory
+  global.waitlistEmails.push(entry.email);
+  console.log(`[URGENT] Email saved to memory only: ${entry.email}`);
+  console.log(`[URGENT] Total emails in memory: ${global.waitlistEmails.length}`);
+      
+  return {
+    success: true,
+    message: 'Email added to waitlist (memory only)',
+    source: 'memory'
+  };
+}
+
+/**
+ * Get all waitlist emails with schema compatibility
+ */
+public async getEmails(): Promise<string[]> {
+  try {
+    // First try with created_at ordering (may not exist in all schemas)
+    try {
+      const { data, error } = await supabase
+        .from(this.tableName)
+        .select('email')
+        .order('created_at', { ascending: false });
+          
+      if (!error && data && data.length > 0) {
+        logDatabaseOperation('Retrieved emails with created_at ordering', { count: data.length });
+        return data.map(item => item.email);
+      }
+          
+      // If there's an error about created_at column, try without ordering
+      if (error && error.message.includes('created_at')) {
+        logDatabaseOperation('created_at column not found, trying without ordering', { error });
+        // Fall through to next attempt
+      } else if (error) {
+        // Some other error occurred
+        logDatabaseOperation('Error retrieving emails from database', { error });
+        throw error;
    */
   private getEmailsFromFile(): string[] {
     try {
