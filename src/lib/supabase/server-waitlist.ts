@@ -135,3 +135,14 @@ export async function removeFromWaitlist(email: string) {
     return { success: false, error: 'An unexpected error occurred' };
   }
 }
+
+// Default export of all waitlist functions for easier imports
+const serverWaitlist = {
+  getAllWaitlistEntries,
+  addToWaitlist,
+  removeFromWaitlist,
+  isValidEmail,
+  supabase
+};
+
+export default serverWaitlist;

@@ -48,8 +48,14 @@ export function verifyToken(token: string): any {
  */
 export async function getUserFromRequest(req: NextRequest) {
   // Check for token in cookies first (client-side)
-  const cookieStore = cookies();
-  const tokenFromCookie = cookieStore.get('auth_token')?.value;
+  let tokenFromCookie: string | undefined;
+  try {
+    // Use req.cookies directly instead of the cookies() function
+    tokenFromCookie = req.cookies.get('auth_token')?.value;
+  } catch (error) {
+    console.error('Error accessing cookies:', error);
+    tokenFromCookie = undefined;
+  }
   
   // Then check authorization header (API calls)
   const authHeader = req.headers.get('authorization');
@@ -107,4 +113,22 @@ export function clearAuthCookie(res: NextResponse): void {
     maxAge: 0,
     path: '/'
   });
+}
+
+/**
+ * Higher-order function to wrap API routes with authentication
+ * This is used by multiple routes in the application
+ */
+export function withAuth(handler: Function) {
+  return async (req: NextRequest, params?: any) => {
+    // Authenticate user
+    const { user, error } = await authenticate(req);
+    
+    if (error) {
+      return NextResponse.json({ success: false, error }, { status: 401 });
+    }
+    
+    // Call the original handler with authenticated user
+    return handler(req, user, params);
+  };
 }
