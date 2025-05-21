@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import waitlistService from '@/lib/supabase/waitlist-service';
+import serverWaitlist from '@/lib/supabase/server-waitlist';
 import { supabase, logDatabaseOperation } from '@/lib/supabase/client';
 import fs from 'fs';
 import path from 'path';
@@ -101,68 +102,154 @@ export async function POST(req: NextRequest) {
     const normalizedEmail = email.toLowerCase().trim();
     console.log(`[WAITLIST] Processing email submission: ${normalizedEmail}`);
     
+    // Track success stages for debugging
     let savedToSupabase = false;
+    let savedToLegacyStorage = false;
+    let savedToDirectFile = false;
     let supabaseError = null;
     
-    // STAGE 1: DIRECT SUPABASE OPERATION - Most reliable approach
     try {
-      console.log(`[WAITLIST] Attempting direct Supabase operation`);
       
-      // 1. Check if email already exists
-      const { data: existingData, error: checkError } = await supabase
-        .from(WAITLIST_TABLE)
-        .select('id, email')
-        .eq('email', normalizedEmail)
-        .limit(1);
-      
-      if (checkError) {
-        logDatabaseOperation('Error checking for existing email', { error: checkError });
-        throw new Error(`Database check error: ${checkError.message}`);
-      }
-      
-      // If email exists, return success
-      if (existingData && existingData.length > 0) {
-        logDatabaseOperation('Email already exists', { email: normalizedEmail, id: existingData[0].id });
-        savedToSupabase = true;
+      // Try to add email using server-side service (with admin privileges)
+      try {
+        const metadata = {
+          userAgent: req.headers.get('user-agent') || 'unknown',
+          timestamp: new Date().toISOString(),
+          environment: process.env.NODE_ENV || 'production'
+        };
         
-        return NextResponse.json({
-          success: true,
-          message: 'Thank you for joining our waitlist!',
-          source: 'supabase-existing',
-          status: 'STAGE_1_SUCCESS'
-        });
-      }
-      
-      // 2. Insert new email
-      const metadata = {
-        userAgent: req.headers.get('user-agent') || 'unknown',
-        timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'production'
-      };
-      
-      const { data: insertData, error: insertError } = await supabase
-        .from(WAITLIST_TABLE)
-        .insert([{
-          email: normalizedEmail,
+        const result = await serverWaitlist.addEmail(normalizedEmail, {
           source: 'waitlist-form',
           metadata
-        }])
-        .select();
-      
-      if (insertError) {
-        logDatabaseOperation('Error inserting email', { error: insertError });
-        throw new Error(`Database insert error: ${insertError.message}`);
+        });
+        
+        // Handle successful addition
+        if (result.success) {
+          savedToSupabase = true;
+          
+          return NextResponse.json({
+            success: true,
+            message: 'Thank you for joining our waitlist!',
+            source: result.source || 'server-waitlist',
+            status: 'STAGE_1_SUCCESS'
+          });
+        }
+      } catch (serverError) {
+        console.error('Server waitlist service error:', serverError);
+        // Continue to fallback mechanisms
       }
       
-      // Success! Return response
-      logDatabaseOperation('Email added successfully', { email: normalizedEmail });
-      savedToSupabase = true;
+      // If server service failed, try the regular waitlist service as fallback
+      try {
+        const legacyResult = await waitlistService.addEmail(normalizedEmail, {
+          source: 'waitlist-form',
+          metadata: {
+            userAgent: req.headers.get('user-agent') || 'unknown',
+            timestamp: new Date().toISOString(),
+            environment: process.env.NODE_ENV || 'production'
+          }
+        });
+        
+        if (legacyResult.success) {
+          savedToLegacyStorage = true;
+          
+          return NextResponse.json({
+            success: true,
+            message: 'Thank you for joining our waitlist!',
+            source: legacyResult.source || 'legacy-service',
+            status: 'STAGE_2_SUCCESS'
+          });
+        }
+      } catch (legacyError) {
+        console.error('Legacy waitlist service error:', legacyError);
+        // Continue to other fallbacks
+      }
       
+      // STAGE 2: DIRECT FILE STORAGE - Fallback approach
+      try {
+        console.log(`[WAITLIST] Attempting direct file storage`);
+        const fileResult = await saveEmailDirectly(normalizedEmail);
+        
+        if (fileResult.success) {
+          console.log(`[WAITLIST] Successfully saved to file storage`);
+          savedToDirectFile = true;
+          
+          // Attempt to also save to Supabase in the background
+          if (!savedToSupabase) {
+            try {
+              // Don't await - fire and forget to avoid blocking
+              waitlistService.addEmail(normalizedEmail, {
+                source: 'waitlist-form',
+                metadata: {
+                  userAgent: req.headers.get('user-agent') || 'unknown',
+                  timestamp: new Date().toISOString()
+                }
+              }).then(result => {
+                console.log(`[WAITLIST] Background Supabase save result:`, result.success);
+              }).catch(err => {
+                console.log(`[WAITLIST] Background Supabase save failed:`, err);
+              });
+            } catch (backupError) {
+              console.error('[WAITLIST] Error triggering background save:', backupError);
+            }
+          }
+          
+          return NextResponse.json({
+            success: true,
+            message: 'Thank you for joining our waitlist!',
+            source: 'file-storage',
+            status: 'STAGE_2_SUCCESS'
+          });
+        }
+      } catch (fileError) {
+        console.error('[WAITLIST] Direct file storage failed:', fileError);
+        // Continue to stage 3
+      }
+      
+      // STAGE 3: LEGACY STORAGE - Compatibility approach
+      try {
+        console.log(`[WAITLIST] Attempting legacy storage`);
+        const legacySuccess = await waitlistStorage.addEmail(normalizedEmail);
+        
+        if (legacySuccess) {
+          console.log(`[WAITLIST] Successfully saved to legacy storage`);
+          return NextResponse.json({
+            success: true,
+            message: 'Thank you for joining our waitlist!',
+            source: 'legacy-storage',
+            status: 'STAGE_3_SUCCESS'
+          });
+        }
+      } catch (legacyError) {
+        console.error('[WAITLIST] Legacy storage failed:', legacyError);
+        // Continue to stage 4
+      }
+      
+      // STAGE 4: MEMORY STORAGE - Last resort approach
+      console.log(`[WAITLIST] Using memory storage as last resort`);
+      
+      // Initialize the global array if it doesn't exist
+      if (!global.waitlistEmails) {
+        global.waitlistEmails = [];
+      }
+      
+      // Add the email if it's not already there
+      if (!global.waitlistEmails.includes(normalizedEmail)) {
+        global.waitlistEmails.push(normalizedEmail);
+      }
+      
+      console.log(`[WAITLIST][URGENT] Email saved to memory only: ${normalizedEmail}`);
+      console.log(`[WAITLIST][URGENT] Current emails in memory:`, global.waitlistEmails);
+      
+      // Log the errors for debugging
+      console.error('[WAITLIST][URGENT] All storage methods failed, using in-memory.');
+      
+      // Return success to the client even though we're in a degraded state
       return NextResponse.json({
         success: true,
         message: 'Thank you for joining our waitlist!',
-        source: 'supabase-direct',
-        status: 'STAGE_1_SUCCESS'
+        source: 'memory-storage',
+        status: 'STAGE_4_FALLBACK'
       });
     } catch (error) {
       supabaseError = error;
