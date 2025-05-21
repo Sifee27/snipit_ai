@@ -15,6 +15,7 @@ export default function LandingPage() {
   const formRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
+  const pricingRef = useRef<HTMLDivElement>(null);
   
   // Set up theme on component mount and handle system preference
   useEffect(() => {
@@ -203,6 +204,12 @@ export default function LandingPage() {
               onClick={() => scrollToSection(featuresRef)}
               className="px-4 py-2 text-white/70 hover:text-white rounded-lg text-sm font-medium transition-all"
             >
+              Features
+            </button>
+            <button 
+              onClick={() => scrollToSection(pricingRef)}
+              className="px-4 py-2 text-white/70 hover:text-white rounded-lg text-sm font-medium transition-all"
+            >
               Pricing
             </button>
           </nav>
@@ -318,21 +325,21 @@ export default function LandingPage() {
             {[
               {
                 title: 'Podcast Summaries',
-                description: '3 summaries/mo in free tier, GPT-3.5 powered',
+                description: 'Extract insights from your favorite podcast episodes',
                 icon: '🎧',
                 features: ['Key points extraction', 'Time-stamped insights', 'Speaker identification']
               },
               {
                 title: 'Video Content',
-                description: 'Priority processing in Pro tier ($5/mo)',
+                description: 'Get the essence of any video content instantly',
                 icon: '📹',
-                features: ['100 summaries/mo in Pro tier', 'GPT-4 for long-form content', 'Chapter markers']
+                features: ['Transcript generation', 'Visual context understanding', 'Chapter markers']
               },
               {
                 title: 'Article & Research',
-                description: 'GPT-4 Turbo in Premium tier ($15/mo)',
+                description: 'Summarize articles and research papers efficiently',
                 icon: '📄',
-                features: ['500 summaries/mo in Premium tier', 'Custom summary styles', 'Enhanced UI & file uploads']
+                features: ['Focus on key research findings', 'Custom summary styles', 'Citation extraction']
               },
             ].map((feature, index) => (
               <div 
@@ -369,6 +376,169 @@ export default function LandingPage() {
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-blue-800/10 blur-[80px] -z-10"></div>
       </section>
 
+      {/* Pricing Section */}
+      <section ref={pricingRef} id="pricing" className="py-32 px-6 relative border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-20">
+            <span className="bg-white/5 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm text-white/70 border border-white/10 inline-block mb-4">Pricing</span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Simple, Transparent Pricing</h2>
+            <p className="text-lg text-white/70 max-w-2xl mx-auto">Choose the plan that fits your needs</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Free Tier */}
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden transition-all hover:translate-y-[-4px] hover:shadow-lg hover:shadow-purple-900/20">
+              <div className="p-8">
+                <h3 className="text-2xl font-bold mb-3 text-white">Free</h3>
+                <div className="mb-4">
+                  <span className="text-3xl font-bold text-white">$0</span>
+                  <span className="text-white/60 ml-1">/mo</span>
+                </div>
+                <p className="text-white/70 mb-6 pb-6 border-b border-white/10">Perfect for casual content consumption</p>
+                
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">3 summaries per month</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">GPT-3.5 powered</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">Basic features</span>
+                  </li>
+                </ul>
+                
+                <button 
+                  onClick={scrollToForm}
+                  className="w-full py-2.5 bg-white/10 hover:bg-white/15 text-white rounded-lg text-sm font-medium transition-all"
+                >
+                  Get Started
+                </button>
+              </div>
+            </div>
+            
+            {/* Pro Tier */}
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden transition-all hover:translate-y-[-4px] hover:shadow-lg hover:shadow-purple-900/20">
+              <div className="p-8">
+                <h3 className="text-2xl font-bold mb-3 text-white">Pro</h3>
+                <div className="mb-4">
+                  <span className="text-3xl font-bold text-white">$5</span>
+                  <span className="text-white/60 ml-1">/mo</span>
+                </div>
+                <p className="text-white/70 mb-6 pb-6 border-b border-white/10">For active content consumers</p>
+                
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">100 summaries per month</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">Priority processing</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">GPT-4 for long-form content</span>
+                  </li>
+                </ul>
+                
+                <button 
+                  onClick={scrollToForm}
+                  className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-all"
+                >
+                  Get Started
+                </button>
+              </div>
+            </div>
+            
+            {/* Premium Tier */}
+            <div className="bg-gradient-to-b from-purple-600/20 to-blue-600/10 backdrop-blur-sm border border-purple-500/20 rounded-xl overflow-hidden transition-all hover:translate-y-[-4px] hover:shadow-lg hover:shadow-purple-900/30 relative">
+              <div className="absolute top-0 left-0 right-0 px-4 py-1.5 bg-gradient-to-r from-purple-500 to-blue-500 text-xs font-bold text-white text-center">
+                Most Popular
+              </div>
+              <div className="p-8 pt-10">
+                <h3 className="text-2xl font-bold mb-3 text-white">Premium</h3>
+                <div className="mb-4">
+                  <span className="text-3xl font-bold text-white">$15</span>
+                  <span className="text-white/60 ml-1">/mo</span>
+                </div>
+                <p className="text-white/70 mb-6 pb-6 border-b border-white/10">For power users and professionals</p>
+                
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">300-500 summaries per month</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">Access to GPT-4 Turbo</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">File uploads + enhanced UI</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">Custom summary styles</span>
+                  </li>
+                </ul>
+                
+                <button 
+                  onClick={scrollToForm}
+                  className="w-full py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg text-sm font-medium transition-all"
+                >
+                  Get Started
+                </button>
+              </div>
+            </div>
+            
+            {/* Enterprise Tier */}
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden transition-all hover:translate-y-[-4px] hover:shadow-lg hover:shadow-purple-900/20">
+              <div className="p-8">
+                <h3 className="text-2xl font-bold mb-3 text-white">Enterprise</h3>
+                <div className="mb-4">
+                  <span className="text-xl font-bold text-white">Custom</span>
+                </div>
+                <p className="text-white/70 mb-6 pb-6 border-b border-white/10">For teams and organizations</p>
+                
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">Unlimited summaries</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">All premium features</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">Custom solutions for teams</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/70">Dedicated account manager</span>
+                  </li>
+                </ul>
+                
+                <button 
+                  onClick={scrollToForm}
+                  className="w-full py-2.5 bg-white/10 hover:bg-white/15 text-white rounded-lg text-sm font-medium transition-all"
+                >
+                  Contact Sales
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Decorative elements */}
+        <div className="absolute top-1/3 left-0 w-[400px] h-[400px] rounded-full bg-purple-800/10 blur-[100px] -z-10"></div>
+        <div className="absolute bottom-0 right-0 w-[300px] h-[300px] rounded-full bg-blue-800/10 blur-[80px] -z-10"></div>
+      </section>
+      
       {/* Waitlist Form Section */}
       <section 
         ref={formRef}
