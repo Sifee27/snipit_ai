@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import getWaitlistStorage from '@/lib/storage/waitlist-storage';
+import waitlistService from '@/lib/supabase/waitlist-service';
 import fs from 'fs';
 import path from 'path';
+
+// For backward compatibility, still import the old storage
+import getWaitlistStorage from '@/lib/storage/waitlist-storage';
 
 // Guaranteed working storage
 const GUARANTEED_DATA_DIR = path.join(process.cwd(), 'data');
@@ -101,41 +104,68 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'Invalid email format' }, { status: 400 });
     }
     
-    // PRODUCTION-GRADE SOLUTION: Multi-layer approach with guaranteed persistence
+    // ENTERPRISE-GRADE SOLUTION: Primary database storage with file-based fallback
     try {
-      // First, try to directly save the email using our guaranteed method
-      const directResult = await saveEmailDirectly(email);
+      console.log(`Processing waitlist submission for ${email} using Supabase...`);
       
-      // As a backup, also try the regular storage system (but don't wait for it)
-      try {
-        // Don't await - fire and forget to avoid blocking
-        waitlistStorage.addEmail(email).then(storageResult => {
-          console.log(`Backup storage result for ${email}:`, storageResult);
-        }).catch(backupError => {
-          console.log(`Backup storage failed for ${email}:`, backupError);
-        });
-      } catch (backupError) {
-        // Ignore backup storage errors - the direct storage is our primary concern
-        console.log('Backup storage attempt failed:', backupError);
+      // PRIMARY: Use Supabase for reliable cloud database storage
+      const supabaseResult = await waitlistService.addEmail(email, {
+        source: 'waitlist-form',
+        metadata: {
+          userAgent: req.headers.get('user-agent'),
+          timestamp: new Date().toISOString(),
+          environment: process.env.NODE_ENV
+        }
+      });
+      
+      // FALLBACK 1: If Supabase fails, try direct file storage
+      if (!supabaseResult.success && !supabaseResult.message.includes('already registered')) {
+        console.log(`Supabase storage failed for ${email}, falling back to direct file storage...`);
+        const directResult = await saveEmailDirectly(email);
+        
+        if (directResult.success) {
+          console.log(`Email ${email} saved via direct file storage fallback`);
+          return NextResponse.json({
+            success: true,
+            message: 'Thank you! You have been added to our waitlist.',
+            storageMethod: 'file_fallback'
+          }, { status: 200 });
+        }
       }
       
-      // Return result based on our direct storage outcome
-      if (directResult.success) {
-        console.log('Email successfully added to waitlist (DIRECT):', email);
+      // FALLBACK 2: For completeness, also try the regular storage system (background task)
+      // This ensures multiple storage mechanisms for redundancy
+      try {
+        // Don't await - fire and forget to avoid blocking
+        waitlistStorage.addEmail(email).then(legacyResult => {
+          console.log(`Legacy storage result for ${email}:`, legacyResult);
+        }).catch(legacyError => {
+          console.log(`Legacy storage failed for ${email}:`, legacyError);
+        });
+      } catch (legacyError) {
+        // Ignore legacy storage errors - Supabase is our primary storage
+        console.log('Legacy storage attempt failed:', legacyError);
+      }
+      
+      // Return result based on Supabase outcome
+      if (supabaseResult.success) {
+        console.log(`Email ${email} successfully added to waitlist in Supabase`);
         return NextResponse.json({
           success: true,
-          message: 'Thank you! You have been added to our waitlist.'
+          message: 'Thank you! You have been added to our waitlist.',
+          storageMethod: 'supabase'
         }, { status: 200 });
-      } else if (directResult.message.includes('already registered')) {
+      } else if (supabaseResult.message.includes('already registered')) {
         // Handle duplicate gracefully
+        console.log(`Email ${email} already exists in waitlist`);
         return NextResponse.json({
           success: false, 
           message: 'Email already registered'
         }, { status: 400 });
       } else {
-        // Direct storage failed for a different reason
-        console.error('Direct storage failed:', directResult.message);
-        throw new Error(`Direct storage failed: ${directResult.message}`);
+        // All storage mechanisms failed
+        console.error('All storage mechanisms failed:', supabaseResult.message);
+        throw new Error(`Storage failed: ${supabaseResult.message}`);
       }
     } catch (storageError) {
       console.error('ALL storage mechanisms failed:', storageError);
