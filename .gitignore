@@ -47,6 +47,34 @@ next-env.d.ts
 .env.production
 .env*.local
 
+# security and credential files
+secrets.txt
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+service-account.json
+credentials.json
+*.keystore
+*.jks
+
+# logs that might contain sensitive information
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# local config files that might contain sensitive information
+config.local.js
+config.development.js
+.npmrc
+.yarnrc
+.env.production
+.env*.local
+
 # windsurf files
 .windsurf/rules
 .windsurf/metadata

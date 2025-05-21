@@ -5,19 +5,15 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  // Don't include the full API key in logs/responses for security
+  // Don't expose any portion of API keys, even for debugging
   const apiKey = process.env.HUGGING_FACE_API_KEY || '';
-  const maskedKey = apiKey ? 
-    `${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)}` : 
-    'NOT FOUND';
   
   // Gather all debug information
   const debugInfo = {
     environment: {
       NODE_ENV: process.env.NODE_ENV,
       HF_API_KEY_EXISTS: !!process.env.HUGGING_FACE_API_KEY,
-      HF_API_KEY_LENGTH: apiKey.length,
-      HF_API_KEY_PREVIEW: maskedKey,
+      HF_API_KEY_STATUS: apiKey ? 'CONFIGURED' : 'NOT CONFIGURED',
       HF_API_KEY_VALID: apiKey && apiKey.length > 10 && !apiKey.includes('your_api_key_here'),
     },
     nextConfig: {

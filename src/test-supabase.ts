@@ -10,8 +10,8 @@ async function testConnection() {
   try {
     console.log('\nSUPABASE CONNECTION DETAILS:');
     console.log(`URL: ${supabaseUrl}`);
-    // Print partial key for security
-    console.log(`Key (first 8 chars): ${supabaseAnonKey.substring(0, 8)}...`);
+    // Don't log API keys, even partially
+    console.log(`Key: ${supabaseAnonKey ? '[CONFIGURED]' : '[NOT CONFIGURED]'}`);
     
     // Simple query to test connection
     console.log('\nAttempting simple query...');

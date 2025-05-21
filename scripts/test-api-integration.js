@@ -21,15 +21,12 @@ console.log('NODE_ENV:', process.env.NODE_ENV);
 
 // Check API key
 const apiKey = process.env.HUGGING_FACE_API_KEY;
-console.log('API Key exists:', !!apiKey);
+console.log('API Key Status:', apiKey ? 'CONFIGURED' : 'NOT CONFIGURED');
 if (apiKey) {
-  const maskedKey = `${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)}`;
-  console.log('API Key (masked):', maskedKey);
-  console.log('API Key length:', apiKey.length);
   console.log('API Key valid format:', !apiKey.includes('your_api_key_here') && apiKey.length > 10);
 } else {
   console.log('ERROR: Hugging Face API key not found in environment');
-  console.log('Please add HUGGING_FACE_API_KEY to your .env.local file');
+  console.log('Please set HUGGING_FACE_API_KEY in your .env.local file');
 }
 
 // Test YouTube transcript API

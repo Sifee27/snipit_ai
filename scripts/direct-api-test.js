@@ -16,12 +16,10 @@ const TEST_TEXT = "Everywhere in the world, there is a working class that's ofte
 console.log('='.repeat(80));
 console.log('HUGGING FACE API DIRECT TEST');
 console.log('='.repeat(80));
-console.log('API Key exists:', !!HF_API_KEY);
+console.log('API Key Status:', HF_API_KEY ? 'CONFIGURED' : 'NOT CONFIGURED');
 
 if (HF_API_KEY) {
-  const maskedKey = `${HF_API_KEY.substring(0, 4)}...${HF_API_KEY.substring(HF_API_KEY.length - 4)}`;
-  console.log('API Key (masked):', maskedKey);
-  console.log('API Key length:', HF_API_KEY.length);
+  // Don't log any portion of the API key, not even masked
   console.log('API Key format valid:', !HF_API_KEY.includes('your_api_key_here') && HF_API_KEY.length > 10);
 }
 

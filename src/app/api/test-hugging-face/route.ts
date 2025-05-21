@@ -11,18 +11,16 @@ async function testHuggingFaceAPI() {
   const model = 'facebook/bart-large-cnn'; // Simple test model
   
   try {
-    console.log('Testing Hugging Face API connection with key:', 
-      HF_API_KEY ? `${HF_API_KEY.substring(0, 4)}...${HF_API_KEY.substring(HF_API_KEY.length - 4)}` : 'NOT FOUND');
+    console.log('Testing Hugging Face API connection');
+    console.log('API Key Status:', HF_API_KEY ? '[CONFIGURED]' : '[NOT CONFIGURED]');
     
     const headers = {
       'Authorization': `Bearer ${HF_API_KEY}`,
       'Content-Type': 'application/json'
     };
     
-    console.log('Request headers:', JSON.stringify({
-      'Authorization': `Bearer ${HF_API_KEY?.substring(0, 4)}...`,
-      'Content-Type': 'application/json'
-    }));
+    // Don't log authorization headers, even partially
+    console.log('Request headers prepared with content type:', headers['Content-Type']);
     
     const response = await fetch(`${HF_API_URL}/${model}`, {
       method: 'POST',
@@ -102,11 +100,10 @@ export async function GET() {
   // Include environment variables status (masked for security)
   const envStatus = {
     NODE_ENV: process.env.NODE_ENV,
-    HF_API_KEY_EXISTS: !!process.env.HUGGING_FACE_API_KEY,
-    HF_API_KEY_LENGTH: process.env.HUGGING_FACE_API_KEY?.length || 0,
-    HF_API_KEY_MASKED: process.env.HUGGING_FACE_API_KEY ? 
-      `${process.env.HUGGING_FACE_API_KEY.substring(0, 4)}...${process.env.HUGGING_FACE_API_KEY.substring(process.env.HUGGING_FACE_API_KEY.length - 4)}` : 
-      'NOT FOUND'
+    HF_API_KEY_STATUS: process.env.HUGGING_FACE_API_KEY ? 'CONFIGURED' : 'NOT CONFIGURED',
+    HF_API_KEY_VALID: process.env.HUGGING_FACE_API_KEY && 
+      process.env.HUGGING_FACE_API_KEY.length > 10 && 
+      !process.env.HUGGING_FACE_API_KEY.includes('your_api_key_here')
   };
   
   return NextResponse.json({
