@@ -75,7 +75,9 @@ config.development.js
 .env.production
 .env*.local
 
-# windsurf files
+# windsurf files - exclude all windsurf related files
+.windsurf/
+.windsurf/*
 .windsurf/rules
 .windsurf/metadata
 
