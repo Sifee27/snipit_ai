@@ -385,10 +385,10 @@ export default function LandingPage() {
             <p className="text-lg text-white/70 max-w-2xl mx-auto">Choose the plan that fits your needs</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {/* Free Tier */}
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden transition-all hover:translate-y-[-4px] hover:shadow-lg hover:shadow-purple-900/20">
-              <div className="p-8">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden transition-all hover:translate-y-[-4px] hover:shadow-lg hover:shadow-purple-900/20 flex flex-col">
+              <div className="p-8 flex flex-col h-full">
                 <h3 className="text-2xl font-bold mb-3 text-white">Free</h3>
                 <div className="mb-4">
                   <span className="text-3xl font-bold text-white">$0</span>
@@ -411,18 +411,21 @@ export default function LandingPage() {
                   </li>
                 </ul>
                 
-                <button 
-                  onClick={scrollToForm}
-                  className="w-full py-2.5 bg-white/10 hover:bg-white/15 text-white rounded-lg text-sm font-medium transition-all"
-                >
-                  Get Started
-                </button>
+                <div className="mt-auto">
+                  <button 
+                    onClick={scrollToForm}
+                    className="w-full py-3 bg-white/10 hover:bg-white/15 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center"
+                  >
+                    <span>Get Started</span>
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </button>
+                </div>
               </div>
             </div>
             
             {/* Pro Tier */}
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden transition-all hover:translate-y-[-4px] hover:shadow-lg hover:shadow-purple-900/20">
-              <div className="p-8">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden transition-all hover:translate-y-[-4px] hover:shadow-lg hover:shadow-purple-900/20 flex flex-col">
+              <div className="p-8 flex flex-col h-full">
                 <h3 className="text-2xl font-bold mb-3 text-white">Pro</h3>
                 <div className="mb-4">
                   <span className="text-3xl font-bold text-white">$5</span>
@@ -445,21 +448,24 @@ export default function LandingPage() {
                   </li>
                 </ul>
                 
-                <button 
-                  onClick={scrollToForm}
-                  className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-all"
-                >
-                  Get Started
-                </button>
+                <div className="mt-auto">
+                  <button 
+                    onClick={scrollToForm}
+                    className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center"
+                  >
+                    <span>Get Started</span>
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </button>
+                </div>
               </div>
             </div>
             
             {/* Premium Tier */}
-            <div className="bg-gradient-to-b from-purple-600/20 to-blue-600/10 backdrop-blur-sm border border-purple-500/20 rounded-xl overflow-hidden transition-all hover:translate-y-[-4px] hover:shadow-lg hover:shadow-purple-900/30 relative">
+            <div className="bg-gradient-to-b from-purple-600/20 to-blue-600/10 backdrop-blur-sm border border-purple-500/20 rounded-xl overflow-hidden transition-all hover:translate-y-[-4px] hover:shadow-lg hover:shadow-purple-900/30 relative flex flex-col">
               <div className="absolute top-0 left-0 right-0 px-4 py-1.5 bg-gradient-to-r from-purple-500 to-blue-500 text-xs font-bold text-white text-center">
                 Most Popular
               </div>
-              <div className="p-8 pt-10">
+              <div className="p-8 pt-10 flex flex-col h-full">
                 <h3 className="text-2xl font-bold mb-3 text-white">Premium</h3>
                 <div className="mb-4">
                   <span className="text-3xl font-bold text-white">$15</span>
@@ -486,49 +492,15 @@ export default function LandingPage() {
                   </li>
                 </ul>
                 
-                <button 
-                  onClick={scrollToForm}
-                  className="w-full py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg text-sm font-medium transition-all"
-                >
-                  Get Started
-                </button>
-              </div>
-            </div>
-            
-            {/* Enterprise Tier */}
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden transition-all hover:translate-y-[-4px] hover:shadow-lg hover:shadow-purple-900/20">
-              <div className="p-8">
-                <h3 className="text-2xl font-bold mb-3 text-white">Enterprise</h3>
-                <div className="mb-4">
-                  <span className="text-xl font-bold text-white">Custom</span>
+                <div className="mt-auto">
+                  <button 
+                    onClick={scrollToForm}
+                    className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg text-sm font-medium transition-all flex items-center justify-center"
+                  >
+                    <span>Get Started</span>
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </button>
                 </div>
-                <p className="text-white/70 mb-6 pb-6 border-b border-white/10">For teams and organizations</p>
-                
-                <ul className="space-y-4 mb-8">
-                  <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-white/70">Unlimited summaries</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-white/70">All premium features</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-white/70">Custom solutions for teams</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-white/70">Dedicated account manager</span>
-                  </li>
-                </ul>
-                
-                <button 
-                  onClick={scrollToForm}
-                  className="w-full py-2.5 bg-white/10 hover:bg-white/15 text-white rounded-lg text-sm font-medium transition-all"
-                >
-                  Contact Sales
-                </button>
               </div>
             </div>
           </div>
