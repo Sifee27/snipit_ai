@@ -192,19 +192,7 @@ export default function LandingPage() {
               onClick={() => scrollToSection(featuresRef)}
               className="px-4 py-2 text-white/70 hover:text-white rounded-lg text-sm font-medium transition-all"
             >
-              Features
-            </button>
-            <button 
-              onClick={() => scrollToSection(featuresRef)}
-              className="px-4 py-2 text-white/70 hover:text-white rounded-lg text-sm font-medium transition-all"
-            >
               How It Works
-            </button>
-            <button 
-              onClick={() => scrollToSection(featuresRef)}
-              className="px-4 py-2 text-white/70 hover:text-white rounded-lg text-sm font-medium transition-all"
-            >
-              Features
             </button>
             <button 
               onClick={() => scrollToSection(pricingRef)}
@@ -253,7 +241,7 @@ export default function LandingPage() {
         
         {/* Subtitle */}
         <p className="text-white/80 text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-          Be first in line to experience the future of AI with Snipit! Our AI summarizes podcasts, videos, and articles in seconds.
+          Be first in line to experience the future of AI with Snipit!Snipit uses AI to summarize podcasts, videos, and articles in seconds, allowing you to over fifteen hours a week.
         </p>
         
         {/* Email form */}
